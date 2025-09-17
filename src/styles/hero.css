@@ -1,0 +1,159 @@
+/* Основной контейнер */
+.hero-scroll-container {
+    position: relative;
+    height: 250vh;
+    overflow: hidden;
+}
+
+/* Фоновые изображения (фиксированные) */
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    opacity: 0;
+}
+
+.background-image.active {
+    opacity: 1;
+}
+
+.bg1 {
+    background-image: url('../assets/images/фон1.png');
+}
+
+.bg2 {
+    background-image: url('../assets/images/фон2.png');
+}
+
+/* Контейнер для скролла контента */
+.content-scroll-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+/* Секции с контентом */
+.content-section {
+    display: flex;
+    justify-content: center;
+}
+
+/* Стили для контента */
+.hero-content {
+    max-width: 800px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.0); /* Полупрозрачный фон */
+    border-radius: 10px;
+}
+
+/* Пустое пространство */
+.empty-space {
+    background: white;
+}
+
+/* Основной контент страницы */
+.main-content {
+    position: relative;
+    background: white;
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    z-index: 2;
+}
+
+/* Стили текста и кнопки */
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    background: #ff6b00;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.cta-button:hover {
+    background: #e05d00;
+}
+
+/* Основной контент после эффектов */
+.main-content {
+    position: relative;
+    background: white;
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    z-index: 0;
+}
+
+/* Стили для контейнера с 3D моделью */
+/* Контейнер для 3D модели */
+.model-container {
+    position: relative;
+    width: 100%;
+    background: #f0f0f0;
+}
+
+.model-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Элементы управления */
+.scale-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+}
+
+.scale-controls button {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.rotation-control {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.rotation-control:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+html {
+    scroll-behavior: smooth;
+}
