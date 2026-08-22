@@ -19,6 +19,9 @@
 .env.test.local
 .env.production.local
 
+# Видео не тащим в git (используется локально при билде)
+/src/assets/videos/
+
 # Beget audit / артефакты деплоя
 /_beget_audit*
 /_beget_audit_xlsx/
@@ -26,7 +29,7 @@
 /_beget_lite/
 /_extract.ps1
 /build.log
-/beget-deploy.zip
+/laboratoriya-dozhdy-deploy.zip
 /thegreenstone-beget-deploy*.zip
 /build/
 
