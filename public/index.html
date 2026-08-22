@@ -5,6 +5,9 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <!-- Предзагрузка постера видео с главной — показывается мгновенно,
+         пока грузится сам MP4 (избавляет от «чёрного прямоугольника» в первые секунды) -->
+    <link rel="preload" as="image" href="%PUBLIC_URL%/poster-hero-mini.jpg" />
     <meta
       name="description"
       content="Web site created using create-react-app"
@@ -24,10 +27,50 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>TheGreenStone — Лаборатория дождя</title>
+    <meta name="description" content="Проектирование, монтаж и обслуживание систем автоматического полива в Санкт-Петербурге и Ленинградской области. Автополив под ключ — гарантия 5 лет." />
+
+    <!-- Open Graph для превью при шаринге (фолбэк до монтирования React) -->
+    <meta property="og:title" content="TheGreenStone — Лаборатория дождя" />
+    <meta property="og:description" content="Проектирование, монтаж и обслуживание систем автоматического полива в СПб и ЛО." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://thegreenstone.ru/" />
+    <meta property="og:image" content="https://thegreenstone.ru/og-image.jpg" />
+    <meta property="og:site_name" content="TheGreenStone" />
+    <meta property="og:locale" content="ru_RU" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TheGreenStone — Лаборатория дождя" />
+    <meta name="twitter:description" content="Проектирование, монтаж и обслуживание систем автоматического полива в СПб и ЛО." />
+    <meta name="twitter:image" content="https://thegreenstone.ru/og-image.jpg" />
+
+    <!-- Канонический URL главной страницы (фолбэк; per-route URL
+         перетираются react-helmet-async в SeoHead) -->
+    <link rel="canonical" href="https://thegreenstone.ru/" />
+
+    <!-- JSON-LD: базовая информация о компании (фолбэк до React) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "TheGreenStone",
+        "alternateName": "Лаборатория дождя",
+        "url": "https://thegreenstone.ru",
+        "logo": "https://thegreenstone.ru/logo.png",
+        "email": "info@autopoliv.ru",
+        "telephone": "+7-999-529-20-65",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Санкт-Петербург",
+            "addressRegion": "Ленинградская область",
+            "addressCountry": "RU"
+        }
+    }
+    </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>TheGreenStone — Лаборатория дождя. Автополив под ключ в Санкт-Петербурге. Включите JavaScript для полноценной работы сайта.</noscript>
     <div id="root"></div>
     <!--
       This HTML file is a template.

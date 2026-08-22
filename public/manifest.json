@@ -1,6 +1,8 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "TheGreenStone",
+  "name": "TheGreenStone — Лаборатория дождя",
+  "description": "Проектирование и монтаж систем автоматического полива в Санкт-Петербурге и Ленинградской области.",
+  "lang": "ru-RU",
   "icons": [
     {
       "src": "favicon.ico",
@@ -19,7 +21,9 @@
     }
   ],
   "start_url": ".",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#2c3e50",
+  "background_color": "#ffffff",
+  "categories": ["business", "lifestyle"]
 }

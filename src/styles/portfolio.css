@@ -1,155 +1,386 @@
-.portfolio-page {
+/* =================================================== */
+/* ПОЛНОЭКРАННОЕ ПОРТФОЛИО СО SCROLL-SNAP (как главная) */
+/* =================================================== */
+
+/* Глобальные стили html/body управляются централизованно в App.css,
+   чтобы не было конфликта с hero.css при переключении страниц. */
+
+/* Главный контейнер портфолио занимает весь экран,
+   чтобы не появлялся скроллбар у body */
+.portfolio-main {
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Контейнер скролла — копия логики Hero */
+.portfolio-scroll-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    background: #000;
     font-family: 'Arial', sans-serif;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.portfolio-hero {
-    background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
     color: white;
-    padding: 80px 0;
-    text-align: center;
 }
 
-.portfolio-hero h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-    font-weight: 700;
+/* Скроллбар — скрыт, как у главной */
+.portfolio-scroll-container::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
 }
 
-.portfolio-hero p {
-    font-size: 1.2rem;
-    opacity: 0.9;
-}
+/* =================================================== */
+/* ФИНАЛЬНАЯ СЕКЦИЯ С ФУТЕРОМ                           */
+/* =================================================== */
 
-.portfolio-content {
-    padding: 60px 0;
-}
-
-.portfolio-filters {
+.portfolio-footer-section {
+    position: relative;
+    width: 100%;
     display: flex;
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
+    align-items: stretch;
+    scroll-snap-align: end;
+    scroll-snap-stop: always;
+    box-sizing: border-box;
+    background: #1a1a1a;
+    overflow: hidden;
+    /* Глобальное section { padding: 80px 0 } в main.css сюда тоже доходит —
+       обнуляем, чтобы сверху/снизу не было пустого чёрного пространства. */
+    padding: 0;
 }
 
-.filter-btn {
-    padding: 12px 24px;
-    border: 2px solid #4caf50;
-    background: white;
-    color: #4caf50;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-}
-
-.filter-btn:hover,
-.filter-btn.active {
-    background: #4caf50;
+/* Футер внутри портфолио не должен иметь абсолютного скролла */
+.portfolio-footer-section .footer {
+    width: 100%;
+    margin: 0;
+    padding: 20px 0 16px;
+    background-color: #1a1a1a;
     color: white;
-}
-
-.portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 30px;
-}
-
-.portfolio-item {
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.portfolio-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
-
-.portfolio-image {
+    display: flex;
+    align-items: center;
     position: relative;
-    height: 250px;
+    z-index: 10;
+}
+
+/* =================================================== */
+/* СЕКЦИИ С ОБЪЕКТАМИ (каждая — на весь экран)          */
+/* =================================================== */
+
+.portfolio-item-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: #000;
+}
+
+.portfolio-item-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
     overflow: hidden;
 }
 
-.portfolio-image img {
+.portfolio-item-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    display: block;
 }
 
-.portfolio-item:hover .portfolio-image img {
-    transform: scale(1.05);
+/* Видео внутри секции (используется на главной в первой hero-секции).
+   Занимает всю площадь родителя, как и <img>.
+
+   Плавное появление через @keyframes (а не через ручной JS-класс):
+   - видео гарантированно появится, даже если JS не отработал;
+   - animation-fill-mode: both сохраняет opacity:1 после завершения;
+   - небольшая задержка позволяет первым кадрам загрузиться до фейда. */
+.portfolio-item-image video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    animation: videoFadeIn 0.6s ease-out 0.15s forwards;
 }
 
-.portfolio-category {
+@keyframes videoFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.portfolio-item-overlay {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(76, 175, 80, 0.9);
-    color: white;
-    padding: 5px 15px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+/* Над видео оверлей ослаблен (0.25 вместо 0.5), чтобы постер и сам
+   видеоряд выглядели ярче, но заголовок/подзаголовок оставались
+   читаемыми. Над фото-секциями оверлей остаётся 0.5 (там без затемнения
+   контрастная картинка «забивает» текст). */
+.portfolio-item-image video ~ .portfolio-item-overlay {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+/* =================================================== */
+/* ПОЛУПРОЗРАЧНЫЕ КНОПКИ ПЕРЕЛИСТЫВАНИЯ ФОТО           */
+/* =================================================== */
+
+.portfolio-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 64px;
+    height: 64px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.35);
+    color: #ffffff;
+    font-size: 2.5rem;
+    line-height: 1;
+    font-weight: 300;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: all 0.25s ease;
+    user-select: none;
+    padding: 0;
+}
+
+.portfolio-nav-btn:hover {
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.portfolio-nav-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.portfolio-nav-prev {
+    left: 30px;
+}
+
+.portfolio-nav-next {
+    right: 30px;
+}
+
+/* =================================================== */
+/* ТОЧКИ-ИНДИКАТОРЫ ФОТО                               */
+/* =================================================== */
+
+.portfolio-photo-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    gap: 10px;
+    padding: 8px 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    font-size: 0.9rem;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.portfolio-photo-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    transition: all 0.25s ease;
+}
+
+.portfolio-photo-dot.active {
+    background: #ffffff;
+    transform: scale(1.25);
+}
+
+/* =================================================== */
+/* ИНДИКАТОР ТЕКУЩЕГО ПРОЕКТА                           */
+/* =================================================== */
+
+.portfolio-indicator {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    font-size: 1.1rem;
     font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
 }
 
-.portfolio-info {
-    padding: 25px;
+.portfolio-indicator.hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
-.portfolio-info h3 {
+.indicator-current {
     font-size: 1.4rem;
-    margin-bottom: 10px;
-    color: #333;
 }
 
-.portfolio-info p {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 20px;
+.indicator-sep {
+    opacity: 0.6;
 }
 
-.portfolio-details-btn {
-    background: #4caf50;
+.indicator-total {
+    opacity: 0.6;
+}
+
+/* =================================================== */
+/* АДАПТИВНОСТЬ                                         */
+/* =================================================== */
+
+@media (max-width: 1024px) {
+    .portfolio-nav-btn {
+        width: 54px;
+        height: 54px;
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .portfolio-nav-btn {
+        width: 46px;
+        height: 46px;
+        font-size: 1.7rem;
+    }
+
+    .portfolio-nav-prev {
+        left: 15px;
+    }
+
+    .portfolio-nav-next {
+        right: 15px;
+    }
+
+    .portfolio-photo-dots {
+        bottom: 20px;
+    }
+
+    .portfolio-indicator {
+        bottom: 20px;
+        right: 20px;
+        font-size: 0.95rem;
+    }
+
+    .indicator-current {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .portfolio-nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .portfolio-nav-prev {
+        left: 10px;
+    }
+
+    .portfolio-nav-next {
+        right: 10px;
+    }
+
+    .portfolio-photo-dots {
+        bottom: 15px;
+        padding: 6px 10px;
+        gap: 7px;
+    }
+
+    .portfolio-photo-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .portfolio-indicator {
+        bottom: 15px;
+        right: 15px;
+    }
+}
+
+/* =================================================== */
+/* КОНТЕНТ HERO-СЕКЦИЙ ГЛАВНОЙ                          */
+/* (заголовок, подзаголовок, CTA, кнопки управления)    */
+/* =================================================== */
+
+/* Контейнер контента внутри hero-секции.
+   Поднимается над фоновым изображением/видео (z-index 2). */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* Чтобы h2 в секциях 2 и 3 главной выглядел ровно так же, как h1
+   в первой секции (3.5rem). Без этого правила заголовок мельчает
+   до дефолтных ~24px (стиль браузера). */
+.hero-content h2 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.hero-content p {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    background: transparent;
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    border-radius: 5px;
     cursor: pointer;
-    font-weight: 600;
-    transition: background 0.3s ease;
+    transition: all 0.3s;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-.portfolio-details-btn:hover {
-    background: #388e3c;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .portfolio-hero h1 {
-        font-size: 2.2rem;
-    }
-
-    .portfolio-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .portfolio-filters {
-        gap: 10px;
-    }
-
-    .filter-btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
+.cta-button:hover {
+    transform: translateY(-2px);
+    text-shadow: 4px 4px 12px rgba(0, 0, 0, 0.8);
 }
