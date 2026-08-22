@@ -1,0 +1,105 @@
+# =============================================================
+# .htaccess для SPA thegreenstone.ru на хостинге Beget
+# =============================================================
+# Этот файл автоматически копируется CRA в build/.htaccess
+# при `npm run build` (CRA копирует все файлы из public/ в build/).
+
+# -------------------------------------------------------------
+# SPA-роутинг (React Router v7): все неизвестные URL
+# перенаправляем на index.html, чтобы клиентский роутер сам
+# разобрал, какая страница нужна. Без этого заход на
+# /services, /portfolio, /about, /contact вернёт 404 от Beget.
+# -------------------------------------------------------------
+RewriteEngine On
+RewriteBase /
+
+# --- SEO: убираем дубли URL (п. I отчёта beget) ---
+# 1. www.thegreenstone.ru → thegreenstone.ru (301 редирект).
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# 2. /index.html → / (Beget хостит сборку на index.html, но
+#    для SEO такие URL — дубли главной страницы).
+RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Если запрос идёт к существующему файлу или папке — НЕ перенаправляем
+# (важно для sitemap.xml, robots.txt, статики из /static, og-image.jpg и т.д.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Все остальные запросы → index.html
+RewriteRule ^ index.html [L]
+
+# -------------------------------------------------------------
+# SEO / безопасность — пункты отчёта beget
+# -------------------------------------------------------------
+
+# HSTS (только если сайт работает по HTTPS — Beget даёт бесплатный SSL).
+# ВАЖНО: без HTTPS эта строка приведёт к 500-й ошибке в браузере.
+# Если SSL ещё не включён — закомментируйте эту строку.
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+# Защита от clickjacking
+Header set X-Frame-Options "SAMEORIGIN"
+
+# Запрет на сниффинг MIME-типов
+Header set X-Content-Type-Options "nosniff"
+
+# Политика рефереров для приватности
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Разрешаем политику безопасности для Google Fonts / иконок (если будут)
+# Сейчас на сайте нет внешних шрифтов, поэтому CSP максимально строгая.
+# Если поздёшь подключите Google Fonts или аналитику — ослабьте правила.
+Header set Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; frame-ancestors 'self'"
+
+# -------------------------------------------------------------
+# Производительность: Gzip для текстовых файлов
+# -------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# -------------------------------------------------------------
+# Кэширование статики (файлы с хешем — навсегда, остальное — короткий TTL)
+# -------------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Файлы с хешем в имени (main.abc123.js) — кэшируем 1 год
+    # CRA сам генерирует такие имена, поэтому это безопасно
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/css "access plus 1 year"
+
+    # Картинки — кэшируем 30 дней
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/webp "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+    ExpiresByType image/x-icon "access plus 30 days"
+
+    # HTML и манифесты — короткий TTL (чтобы обновления доезжали быстро)
+    ExpiresByType text/html "access plus 1 hour"
+    ExpiresByType application/manifest+json "access plus 1 hour"
+    ExpiresByType application/xml "access plus 1 hour"
+</IfModule>
+
+# -------------------------------------------------------------
+# Запрет на индексацию служебных файлов, если такие появятся
+# -------------------------------------------------------------
+<FilesMatch "^(\.env|\.gitignore|package\.json|README\.md)$">
+    Require all denied
+</FilesMatch>
+
+# -------------------------------------------------------------
+# Кодировка по умолчанию
+# -------------------------------------------------------------
+AddDefaultCharset UTF-8

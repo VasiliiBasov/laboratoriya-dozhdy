@@ -1,0 +1,50 @@
+/* Страница «Политика конфиденциальности» (/privacy) и другие юридические страницы.
+   Сделано нейтрально, чтобы не конфликтовать с portfolio-main.
+   Стили согласованы с main.css (шрифт Arial, базовые цвета). */
+
+.legal-page {
+    background: #fff;
+    color: #2c3e50;
+    padding: 80px 20px 60px;
+    min-height: calc(100vh - 200px);
+}
+
+.legal-container {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+.legal-container h1 {
+    font-size: 28px;
+    margin: 0 0 24px;
+    color: #2c3e50;
+}
+
+.legal-container h2 {
+    font-size: 20px;
+    margin: 32px 0 12px;
+    color: #2c3e50;
+}
+
+.legal-container p,
+.legal-container li {
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.legal-container ul {
+    padding-left: 24px;
+}
+
+.legal-container a {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+.legal-updated {
+    font-size: 13px !important;
+    color: #888;
+    margin-bottom: 24px !important;
+    font-style: italic;
+}

@@ -1,0 +1,439 @@
+/* =================================================== */
+/* ОБЩИЕ СТИЛИ ПОЛНОЭКРАННЫХ СТРАНИЦ                    */
+/* (используются классами из portfolio.css)            */
+/* =================================================== */
+
+/* Контент по центру секции */
+.portfolio-content-center {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    color: #ffffff;
+    max-width: 900px;
+    padding: 0 2rem;
+    text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.85);
+}
+
+.portfolio-section-title {
+    margin: 0 0 1.5rem 0;
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.15;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: contentFadeUp 0.8s ease-out 0.2s forwards;
+}
+
+.portfolio-section-desc {
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: contentFadeUp 0.8s ease-out 0.45s forwards;
+}
+
+@keyframes contentFadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =================================================== */
+/* ФОРМА КОНТАКТОВ НА СТРАНИЦЕ /contact                  */
+/* =================================================== */
+
+.portfolio-contact-form {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 600px;
+    padding: 2.5rem;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffffff;
+    text-align: left;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: contentFadeUp 0.8s ease-out 0.2s forwards;
+}
+
+.portfolio-contact-form h2 {
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+    font-size: 2rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.portfolio-contact-form .pcf-group {
+    margin-bottom: 1.2rem;
+}
+
+.portfolio-contact-form label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.portfolio-contact-form input,
+.portfolio-contact-form textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.25s ease, background 0.25s ease;
+    box-sizing: border-box;
+}
+
+.portfolio-contact-form input:focus,
+.portfolio-contact-form textarea:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.portfolio-contact-form input::placeholder,
+.portfolio-contact-form textarea::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.portfolio-contact-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.portfolio-contact-form .pcf-submit {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.95rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.portfolio-contact-form .pcf-submit:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+}
+
+.portfolio-contact-form .pcf-submit:active {
+    transform: translateY(0);
+}
+
+/* =================================================== */
+/* КОНТАКТНАЯ ИНФОРМАЦИЯ                                */
+/* =================================================== */
+
+.portfolio-contact-info {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 700px;
+    width: 100%;
+    padding: 0 2rem;
+    color: #ffffff;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: contentFadeUp 0.8s ease-out 0.2s forwards;
+}
+
+.portfolio-contact-info p {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.portfolio-contact-info a {
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    transition: border-color 0.25s ease;
+}
+
+.portfolio-contact-info a:hover {
+    border-bottom-color: #ffffff;
+}
+
+.pci-row {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.pci-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.4rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+}
+
+.pci-item:hover {
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.pci-item svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.pci-item span {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* =================================================== */
+/* О НАС — КАРТОЧКИ-ПРЕИМУЩЕСТВА                        */
+/* =================================================== */
+
+.portfolio-about-features {
+    position: relative;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+    max-width: 900px;
+    width: 100%;
+    padding: 0 2rem;
+    margin-top: 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: contentFadeUp 0.8s ease-out 0.45s forwards;
+}
+
+.paf-card {
+    padding: 1.2rem 1.5rem;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffffff;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.paf-card:hover {
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-3px);
+}
+
+.paf-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.15rem;
+    color: #ffffff;
+}
+
+.paf-card p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* =================================================== */
+/* АДАПТИВНОСТЬ                                         */
+/* =================================================== */
+
+@media (max-width: 1024px) {
+    .portfolio-section-title {
+        font-size: 2.8rem;
+    }
+
+    .portfolio-section-desc {
+        font-size: 1.2rem;
+    }
+
+    .portfolio-contact-info p {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .portfolio-section-title {
+        font-size: 2.2rem;
+    }
+
+    .portfolio-section-desc {
+        font-size: 1.05rem;
+    }
+
+    .portfolio-contact-form {
+        padding: 1.8rem;
+    }
+
+    .portfolio-about-features {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .portfolio-section-title {
+        font-size: 1.7rem;
+    }
+
+    .portfolio-section-desc {
+        font-size: 0.95rem;
+    }
+
+    .pci-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pci-item {
+        justify-content: center;
+    }
+}
+
+/* =================================================== */
+/* ВНУТРЕННИЕ ССЫЛКИ В СЕКЦИИ (используются на /services) */
+/* =================================================== */
+
+.portfolio-section-links {
+    margin-top: 1.8rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: contentFadeUp 0.8s ease-out 0.7s forwards;
+}
+
+/* Внутренние ссылки нужны для SEO (пункт «Внутренние ссылки» отчёта beget),
+   но визуально мы их НЕ показываем — на их основе поисковики всё равно
+   индексируют страницы /portfolio, /services, /contact. Технически
+   прячем так, чтобы не занимали место и не ломали анимацию. */
+.portfolio-section-link {
+    /* Наследуем стили .visually-hidden: 1x1 px, absolute, скрыто визуально,
+       но доступно для скринридеров и поисковиков.
+       Одновременно позиционируем контейнер, чтобы он не оставлял
+       пустое место под видимой кнопкой. */
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    /* Сбрасываем текстовое оформление, чтобы случайно не светились */
+    background: transparent !important;
+    color: transparent !important;
+    text-shadow: none !important;
+    font-size: 0 !important;
+}
+
+/* =================================================== */
+/* FAQ-БЛОК (/services, последняя секция)                */
+/* =================================================== */
+
+.portfolio-faq-list {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 800px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: contentFadeUp 0.8s ease-out 0.45s forwards;
+}
+
+.portfolio-faq-item {
+    margin-bottom: 0.8rem;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    overflow: hidden;
+    transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.portfolio-faq-item.open {
+    border-color: rgba(255, 255, 255, 0.55);
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.portfolio-faq-q {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.4rem;
+    background: transparent;
+    border: 0;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.portfolio-faq-q:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: -2px;
+}
+
+.portfolio-faq-toggle {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.portfolio-faq-a {
+    padding: 0 1.4rem 1.2rem 1.4rem;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.portfolio-faq-a p {
+    margin: 0;
+}

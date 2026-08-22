@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -8,10 +8,6 @@
     <!-- Предзагрузка постера видео с главной — показывается мгновенно,
          пока грузится сам MP4 (избавляет от «чёрного прямоугольника» в первые секунды) -->
     <link rel="preload" as="image" href="%PUBLIC_URL%/poster-hero-mini.jpg" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -54,18 +50,80 @@
     {
         "@context": "https://schema.org",
         "@type": "Organization",
+        "@id": "https://thegreenstone.ru/#org",
         "name": "TheGreenStone",
         "alternateName": "Лаборатория дождя",
         "url": "https://thegreenstone.ru",
         "logo": "https://thegreenstone.ru/logo.png",
-        "email": "info@autopoliv.ru",
+        "image": "https://thegreenstone.ru/og-image.jpg",
+        "description": "Проектирование, монтаж и обслуживание систем автоматического полива в Санкт-Петербурге и Ленинградской области. Автополив под ключ — гарантия 5 лет.",
+        "foundingDate": "2018",
+        "email": "info@rainlab.ru",
         "telephone": "+7-999-529-20-65",
+        "priceRange": "₽₽",
+        "currenciesAccepted": "RUB",
+        "paymentAccepted": "Cash, Credit Card, Bank Transfer",
+        "areaServed": [
+            { "@type": "City", "name": "Санкт-Петербург" },
+            { "@type": "State", "name": "Ленинградская область" }
+        ],
+        "knowsAbout": [
+            "Автоматический полив",
+            "Капельное орошение",
+            "Дождевание",
+            "Системы орошения",
+            "Ландшафтный полив",
+            "Hunter",
+            "Rain Bird",
+            "Поливторг"
+        ],
+        "brand": {
+            "@type": "Brand",
+            "name": "Поливторг"
+        },
+        "member": {
+            "@type": "Organization",
+            "name": "Поливторг",
+            "description": "Поставщик оборудования для систем автоматического полива"
+        },
         "address": {
             "@type": "PostalAddress",
             "addressLocality": "Санкт-Петербург",
             "addressRegion": "Ленинградская область",
             "addressCountry": "RU"
-        }
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 59.9311,
+            "longitude": 30.3609
+        },
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+                "opens": "09:00",
+                "closes": "20:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Saturday",
+                "opens": "10:00",
+                "closes": "18:00"
+            }
+        ]
+    }
+    </script>
+
+    <!-- JSON-LD: WebSite + SearchAction — для сниппета поиска -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://thegreenstone.ru/#website",
+        "url": "https://thegreenstone.ru",
+        "name": "TheGreenStone — Лаборатория дождя",
+        "inLanguage": "ru-RU",
+        "publisher": { "@id": "https://thegreenstone.ru/#org" }
     }
     </script>
   </head>
