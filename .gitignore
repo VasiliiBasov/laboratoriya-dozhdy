@@ -32,6 +32,7 @@
 /laboratoriya-dozhdy-deploy.zip
 /thegreenstone-beget-deploy*.zip
 /build/
+/winscp.ini
 
 npm-debug.log*
 yarn-debug.log*

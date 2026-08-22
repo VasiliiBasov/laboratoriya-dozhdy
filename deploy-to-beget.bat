@@ -1,21 +1,26 @@
 ﻿@echo off
 REM =============================================================
-REM  Beget deploy: thegreenstone.ru
+REM  Beget deploy: thegreenstone.ru  ->  Лаборатория дождя
 REM  Загружает laboratoriya-dozhdy-deploy.zip и распаковывает
 REM  на сервере через SSH (WinSCP).
 REM
 REM  ПЕРЕД ПЕРВЫМ ЗАПУСКОМ:
 REM    1. Установите WinSCP: https://winscp.net/
-REM    2. Откройте его, подключитесь к Beget (SFTP),
-REM       введите хост/логин/пароль.
-REM    3. Меню: Session -^> Generate Session URL/Code...
-REM       выберите "Configuration file" (.ini format)
+REM    2. В панели Beget (cp.beget.com -> FTP) создайте FTP-аккаунт
+REM       с включённым SSH (чекбокс "Включить SSH").
+REM       - Логин: только латинские буквы и цифры, БЕЗ '_'
+REM         (Beget отклоняет подчёркивание в логине)
+REM       - Путь: /greenstone.ru/public_html/
+REM       - FTP-сервер: lizaptsw.beget.tech (см. в панели)
+REM    3. Подключитесь к Beget по SFTP через WinSCP
+REM       (host=lizaptsw.beget.tech, логин и пароль - из п.2).
+REM    4. Меню: Session -> Generate Session URL/Code...
+REM       выберите "Scripted configuration file (.ini)",
+REM       поставьте галку "Include encrypted password"
 REM       и сохраните как winscp.ini рядом с этим .bat.
 REM       Пароль будет зашифрован мастер-паролем.
-REM    4. Запустите этот .bat.
+REM    5. Запустите этот .bat.
 REM =============================================================
-setlocal EnableDelayedExpansion
-
 set "SCRIPT_DIR=%~dp0"
 set "INI=%SCRIPT_DIR%winscp.ini"
 set "ZIP=%SCRIPT_DIR%laboratoriya-dozhdy-deploy.zip"

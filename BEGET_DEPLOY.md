@@ -1,45 +1,62 @@
-﻿# Деплой на Beget (thegreenstone.ru)
+﻿# Деплой на Beget (thegreenstone.ru → «Лаборатория дождя»)
 
-## Что нужно
+## Реальные данные из панели cp.beget.com/ftp
+
+- Логин панели: `lizaptsw`
+- FTP-сервер (хост): `lizaptsw.beget.tech`
+- Каталог сайта на сервере: `/greenstone.ru/public_html/`
+- **Важно:** Beget отклоняет `_` в логинах FTP/SSH (`lizaptsw_` — нельзя).
+
+## Что нужно сделать один раз
 
 1. Установить **WinSCP**: https://winscp.net/eng/download.php
-2. Включить **SSH-доступ** в панели Beget: Сайт → SSH-доступ → Включён.
-3. Запомнить SSH-пароль (задаётся отдельно от пароля панели).
-
-## Подготовка (один раз)
-
-1. Откройте WinSCP.
-2. Протокол: **SFTP**.
-3. Хост: `thegreenstone.beget.tech` (или другой, см. панель).
-4. Логин и пароль — от SSH Beget.
-5. Нажмите "Войти". Должно открыться SSH-соединение.
-6. Если всё ОК: **Session → Generate Session URL/Code...**
-7. Выберите **"Scripted configuration file (.ini)"**.
-8. Поставьте галку **"Include encrypted password"**.
-9. Придумайте мастер-пароль (например, пароль от вашего ПК) — он будет использоваться для расшифровки.
-10. Сохраните как `winscp.ini` рядом с `deploy-to-beget.bat`.
-11. Готово.
+2. В **панели Beget** (cp.beget.com > FTP) создать FTP-аккаунт с включённым SSH:
+   - **Логин**: любой из латинских букв/цифр, **без `_`** (например, `lizaptsw_deploy`).
+   - **Пароль**: придумать и запомнить.
+   - **Путь**: `/greenstone.ru/public_html/`
+   - [x] **Включить SSH**.
+3. Открыть WinSCP, протокол **SFTP**:
+   - **Host name**: `lizaptsw.beget.tech`
+   - **User name**: ваш логин из п.2
+   - **Password**: пароль из п.2
+   - Нажать «Login». Должно открыться SFTP-соединение.
+4. **Session → Generate Session URL/Code...**
+   - Выбрать **Scripted configuration file (.ini)**.
+   - Поставить [x] **Include encrypted password**.
+   - Задать **мастер-пароль** (например, пароль от вашего ПК).
+   - Сохранить как `winscp.ini` **рядом с `deploy-to-beget.bat`**.
 
 ## Деплой
 
 Просто запустите `deploy-to-beget.bat`.
 
 Скрипт:
-1. Загрузит `laboratoriya-dozhdy-deploy.zip` в `/public_html/` на сервере.
-2. Распакует архив через `unzip` на сервере.
+1. Загрузит `laboratoriya-dozhdy-deploy.zip` на сервер в каталог,
+   который задан в `winscp.ini` (по умолчанию — домашний каталог SSH-логина).
+2. Перейдёт в `cd /greenstone.ru/public_html/` и распакует архив (`unzip -o`).
 3. Удалит zip-файл.
 4. Поставит права 755 на папки и 644 на файлы.
 5. Откроет `https://thegreenstone.ru/` (опционально).
 
 ## Если что-то пошло не так
 
-- **"winscp.ini not found"** — создайте его по инструкции выше.
-- **"Archive not found"** — соберите проект: `npm run build`, затем пересоздайте `laboratoriya-dozhdy-deploy.zip`.
-- **"Permission denied"** при распаковке — возможно, путь `/public_html` не тот. Уточните в панели Beget домашнюю директорию сайта и поменяйте в `post-upload.txt` строку `cd /public_html`.
-- **`unzip: command not found`** — напишите в поддержку Beget, обычно `unzip` есть на всех тарифах. Альтернатива: распаковывать локально через WinSCP (правый клик на zip → "Extract").
+- **«winscp.ini not found»** — создайте его по инструкции выше.
+- **«Archive not found»** — соберите проект: `npm run build`,
+  затем пересоздайте `laboratoriya-dozhdy-deploy.zip`.
+- **«Permission denied»** при распаковке — возможно, путь `/greenstone.ru/public_html/`
+  не соответствует вашему домену. Уточните в панели Beget домашний каталог сайта
+  и поменяйте строку `cd /greenstone.ru/public_html/` в `post-upload.txt`.
+- **`unzip: command not found`** — напишите в поддержку Beget, обычно `unzip` есть
+  на всех тарифах с SSH. Альтернатива: распаковать локально через WinSCP
+  (правый клик на zip → «Extract») и загрузить папку `thegreenstone.ru/`.
+- **«только английские буквы и цифры» при создании FTP-аккаунта** — это валидация Beget.
+  Уберите `_` из логина.
 
 ## Безопасность
 
-- Пароль хранится в `winscp.ini` **в зашифрованном виде**. Не передавайте этот файл никому.
+- Пароль хранится в `winscp.ini` **в зашифрованном виде** (мастер-пароль).
+  Не передавайте этот файл никому.
 - Мастер-пароль запомните — без него не получится использовать скрипт.
+- `winscp.ini` уже исключён из git (см. `.gitignore`: `/winscp.ini`),
+  так что случайно не запушите credentials.
 - Если мастер-пароль скомпрометирован, пересоздайте `winscp.ini` через WinSCP.

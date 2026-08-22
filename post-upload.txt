@@ -1,9 +1,9 @@
 ﻿# post-upload.txt - WinSCP script: extracts the zip and sets permissions.
-# Assumes the site root is /public_html on Beget.
+# Site root on Beget: /greenstone.ru/public_html/  (see Beget panel -> FTP).
 option batch abort
 option confirm off
 open
-cd /public_html
+cd /greenstone.ru/public_html/
 call unzip -o laboratoriya-dozhdy-deploy.zip
 call rm -f laboratoriya-dozhdy-deploy.zip
 call find . -type d -not -name . -exec chmod 755 {} \;
