@@ -6,19 +6,20 @@ REM  на сервере через SSH (WinSCP).
 REM
 REM  ПЕРЕД ПЕРВЫМ ЗАПУСКОМ:
 REM    1. Установите WinSCP: https://winscp.net/
-REM    2. В панели Beget (cp.beget.com -> FTP) создайте FTP-аккаунт
-REM       с включённым SSH (чекбокс "Включить SSH").
-REM       - Логин: только латинские буквы и цифры, БЕЗ '_'
-REM         (Beget отклоняет подчёркивание в логине)
-REM       - Путь: /greenstone.ru/public_html/
-REM       - FTP-сервер: lizaptsw.beget.tech (см. в панели)
-REM    3. Подключитесь к Beget по SFTP через WinSCP
-REM       (host=lizaptsw.beget.tech, логин и пароль - из п.2).
+REM    2. В панели Beget (cp.beget.com -> FTP) УЖЕ СОЗДАН FTP-аккаунт
+REM       с включённым SSH:
+REM         Логин:   lizaptsw_1234
+REM         Пароль:  YfaFXyEOg*1%
+REM         Путь:    /greenstone.ru/public_html/
+REM         Хост:    lizaptsw.beget.tech
+REM    3. Подключитесь к Beget по SFTP через WinSCP (порт 22)
+REM       (host=lizaptsw.beget.tech, user=lizaptsw_1234,
+REM        password=YfaFXyEOg*1%) — чтобы убедиться, что связь работает.
 REM    4. Меню: Session -> Generate Session URL/Code...
 REM       выберите "Scripted configuration file (.ini)",
-REM       поставьте галку "Include encrypted password"
-REM       и сохраните как winscp.ini рядом с этим .bat.
-REM       Пароль будет зашифрован мастер-паролем.
+REM       поставьте галку "Include encrypted password",
+REM       задайте мастер-пароль и сохраните как winscp.ini рядом
+REM       с этим .bat.
 REM    5. Запустите этот .bat.
 REM =============================================================
 set "SCRIPT_DIR=%~dp0"
