@@ -1,9 +1,0 @@
-﻿# upload.txt - WinSCP script: uploads the deploy zip.
-# The script uses absolute path to the archive (next to this file).
-option batch abort
-option confirm off
-option transfer binary
-open
-put "C:\Users\Vasilii\IdeaProjects\FrogFog\laboratoriya-dozhdy-deploy.zip" ./laboratoriya-dozhdy-deploy.zip
-chmod 644 ./laboratoriya-dozhdy-deploy.zip
-exit

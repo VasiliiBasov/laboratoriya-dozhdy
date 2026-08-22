@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+﻿# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
 /node_modules
@@ -33,7 +33,20 @@
 /thegreenstone-beget-deploy*.zip
 /build/
 /winscp.ini
+# WinSCP-скрипты деплоя содержат пароль в URL, не коммитим
+/upload.txt
+/post-upload.txt
+/winscp-upload.log
+/winscp-post.log
+/_build.log
+/_winscp*.log
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Скриншоты из IDE/терминала могут содержать токены/пароли в выводе, не коммитим
+Снимок*
+Screenshot*
+Screen*
+

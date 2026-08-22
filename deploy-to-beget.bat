@@ -1,59 +1,54 @@
 ﻿@echo off
 REM =============================================================
-REM  Beget deploy: thegreenstone.ru  ->  Лаборатория дождя
-REM  Загружает laboratoriya-dozhdy-deploy.zip и распаковывает
-REM  на сервере через SSH (WinSCP).
+REM  Beget deploy: thegreenstone.ru  ->  Laboratoriya dozhdya
+REM  Synchronizes C:\...\FrogFog\build\ with /home/.../public_html/
+REM  using WinSCP `synchronize local` (only changed files transferred).
 REM
-REM  ПЕРЕД ПЕРВЫМ ЗАПУСКОМ:
-REM    1. Установите WinSCP: https://winscp.net/
-REM    2. В панели Beget (cp.beget.com -> FTP) УЖЕ СОЗДАН FTP-аккаунт
-REM       с включённым SSH:
-REM         Логин:   lizaptsw_1234
-REM         Пароль:  YfaFXyEOg*1%
-REM         Путь:    /greenstone.ru/public_html/
-REM         Хост:    lizaptsw.beget.tech
-REM    3. Подключитесь к Beget по SFTP через WinSCP (порт 22)
-REM       (host=lizaptsw.beget.tech, user=lizaptsw_1234,
-REM        password=YfaFXyEOg*1%) — чтобы убедиться, что связь работает.
-REM    4. Меню: Session -> Generate Session URL/Code...
-REM       выберите "Scripted configuration file (.ini)",
-REM       поставьте галку "Include encrypted password",
-REM       задайте мастер-пароль и сохраните как winscp.ini рядом
-REM       с этим .bat.
-REM    5. Запустите этот .bat.
+REM  Files expected next to this .bat:
+REM    - winscp.ini    (optional, session settings)
+REM    - upload.txt    (WinSCP script)
+REM
+REM  WinSCP is expected at:
+REM    C:\Program Files (x86)\WinSCP\WinSCP.com
+REM  or anywhere in PATH as winscp.com.
+REM
+REM  Pre-requisite: run `npm run build` first.
 REM =============================================================
+setlocal enableextensions
 set "SCRIPT_DIR=%~dp0"
-set "INI=%SCRIPT_DIR%winscp.ini"
-set "ZIP=%SCRIPT_DIR%laboratoriya-dozhdy-deploy.zip"
+set "BUILD=%SCRIPT_DIR%build"
+set "WINSCP=%SCRIPT_DIR%winscp.ini"
+set "UPLOAD_SCRIPT=%SCRIPT_DIR%upload.txt"
+set "UPLOAD_LOG=%SCRIPT_DIR%winscp-upload.log"
 
-if not exist "%INI%" (
-  echo [ERROR] winscp.ini not found: "%INI%"
-  echo See instructions at the top of this file.
+where winscp.com >nul 2>nul
+if %ERRORLEVEL%==0 (
+  set "WINSCP_EXE=winscp.com"
+) else if exist "C:\Program Files (x86)\WinSCP\WinSCP.com" (
+  set "WINSCP_EXE=C:\Program Files (x86)\WinSCP\WinSCP.com"
+) else (
+  echo [ERROR] WinSCP.com not found. Install WinSCP or add it to PATH.
   exit /b 1
 )
 
-if not exist "%ZIP%" (
-  echo [ERROR] Archive not found: "%ZIP%"
-  echo Build it first, then re-create the zip.
+if not exist "%BUILD%" (
+  echo [ERROR] Build directory not found: %BUILD%
+  echo Run `npm run build` first.
   exit /b 1
 )
 
-echo [STEP 1/3] Upload zip...
-winscp.exe /ini="%INI%" /script="%SCRIPT_DIR%upload.txt"
+if not exist "%UPLOAD_SCRIPT%" (
+  echo [ERROR] Upload script not found: %UPLOAD_SCRIPT%
+  exit /b 1
+)
+
+echo [STEP] Synchronizing local build\ -> remote public_html\...
+"%WINSCP_EXE%" /ini="%WINSCP%" /script="%UPLOAD_SCRIPT%" /log="%UPLOAD_LOG%"
 if errorlevel 1 (
-  echo [ERROR] Upload failed.
+  echo [ERROR] Sync failed. See log: %UPLOAD_LOG%
   exit /b 1
 )
 
 echo.
-echo [STEP 2/3] Unzip and set permissions on server...
-winscp.exe /ini="%INI%" /script="%SCRIPT_DIR%post-upload.txt"
-if errorlevel 1 (
-  echo [ERROR] Post-upload failed.
-  exit /b 1
-)
-
-echo.
-echo [STEP 3/3] Done.
-echo Open: https://thegreenstone.ru/
+echo [DONE] Open https://thegreenstone.ru/
 endlocal
