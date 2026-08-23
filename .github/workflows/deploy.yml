@@ -135,8 +135,12 @@ jobs:
           # 3. Rsync build/ → public_html/
           #    -a: archive, -v: verbose, -O: --no-times (у нас нет прав на utimes() в public_html)
           #    --checksum: обновление по содержимому (а не по размеру/timestamp)
-          #    БЕЗ --delete: на shared-хостинге это опасно (rsync может снести .ssh/,
-          #    cgi-bin/, .cache/ — Beget хранит в public_html служебные папки).
+          #    БЕЗ --delete: на shared-хостинге это опасно (rsync сносит .ssh/,
+          #    cgi-bin/, .cache/ — Beget хранит в public_html служебные папки;
+          #    run #8 именно так потерял authorized_keys и SSH-доступ упал).
+          #    --exclude служебных папок: ДОПОЛНИТЕЛЬНАЯ защита — даже если --delete
+          #    случайно вернётся, rsync НИКОГДА не тронет эти папки (--exclude
+          #    обрабатывается ДО сравнения списков и сразу отсекает совпадения).
           #    Старые ассеты (main.OLDHASH.js) остаются мусором, но не мешают:
           #    index.html ссылается на новые хэши из asset-manifest.json.
           #    --exclude='.htaccess' — Beget имеет свой .htaccess, не затираем.
@@ -144,6 +148,12 @@ jobs:
           echo "Deploying build/ → $SSH_TARGET:$REMOTE_DIR"
           rsync -avzO --checksum \
                 --exclude='.htaccess' \
+                --exclude='.ssh' \
+                --exclude='.ssh/**' \
+                --exclude='cgi-bin' \
+                --exclude='cgi-bin/**' \
+                --exclude='.cache' \
+                --exclude='.cache/**' \
                 -e "ssh -i $KEY_FILE -o StrictHostKeyChecking=yes -o ConnectTimeout=15 -p 22" \
                 ./build/ \
                 "$SSH_TARGET:$REMOTE_DIR"
