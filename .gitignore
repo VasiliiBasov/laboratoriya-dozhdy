@@ -19,8 +19,14 @@
 .env.test.local
 .env.production.local
 
-# Видео не тащим в git (используется локально при билде)
-/src/assets/videos/
+# Тяжёлые исходники видео (4K HEVC, .SRT) не тащим в git — они не нужны на runner,
+# билд локально берёт уже транскодированный bgVideo.mp4.
+# При этом сам bgVideo.mp4 (≈13.5 MB H.264 1080p) коммитим — он нужен сборке.
+/src/assets/videos/*.MP4
+/src/assets/videos/*.SRT
+/src/assets/videos/Пролет*
+!/src/assets/videos/
+!/src/assets/videos/bgVideo.mp4
 
 # Beget audit / артефакты деплоя
 /_beget_audit*
