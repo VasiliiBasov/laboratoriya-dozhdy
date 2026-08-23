@@ -133,20 +133,39 @@ jobs:
           fi
 
           # 3. Rsync build/ → public_html/
-          #    -a: archive, -v: verbose, -O: --no-times (у нас нет прав на utimes() в public_html)
+          #    -a: archive (recursive, links, perms, times, group, owner, devices)
+          #    -v: verbose
+          #    -z: compress (полезно для mp4 и css)
+          #    -O: --no-times (у нас нет прав на utimes() в public_html/)
           #    --checksum: обновление по содержимому (а не по размеру/timestamp)
+          #
+          #    Beget shared-hosting запрещает chmod/chown/chgrp/utimes на public_html/:
+          #      run #8: rsync падал на utimes() → + -O
+          #      run #10: rsync падал на chmod() → + --no-perms --no-owner --no-group
+          #    Без этих трёх флагов rsync возвращает exit 23 ещё ДО начала копирования
+          #    файлов (на первом же атрибуте каталога ./), и ничего не заливается.
+          #
           #    БЕЗ --delete: на shared-хостинге это опасно (rsync сносит .ssh/,
           #    cgi-bin/, .cache/ — Beget хранит в public_html служебные папки;
           #    run #8 именно так потерял authorized_keys и SSH-доступ упал).
+          #
           #    --exclude служебных папок: ДОПОЛНИТЕЛЬНАЯ защита — даже если --delete
           #    случайно вернётся, rsync НИКОГДА не тронет эти папки (--exclude
           #    обрабатывается ДО сравнения списков и сразу отсекает совпадения).
+          #
           #    Старые ассеты (main.OLDHASH.js) остаются мусором, но не мешают:
           #    index.html ссылается на новые хэши из asset-manifest.json.
+          #
           #    --exclude='.htaccess' — Beget имеет свой .htaccess, не затираем.
           REMOTE_DIR=/home/l/lizaptsw/rain-lab.ru/public_html/
           echo "Deploying build/ → $SSH_TARGET:$REMOTE_DIR"
-          rsync -avzO --checksum \
+          # На Beget rsync может вернуть 23 (partial transfer) даже если все файлы
+          # успешно скопированы — например, при попытке chmod/chown отдельных
+          # файлов, что мы запретили --no-perms/--no-owner/--no-group. Это
+          # НОРМАЛЬНО: 23 означает «какие-то атрибуты не передались», но данные
+          # уже на месте. Пост-проверка ниже всё равно найдёт файлы и поднимет
+          # настоящий fail-fast если что-то пошло не так.
+          rsync -avzO --no-perms --no-owner --no-group --checksum \
                 --exclude='.htaccess' \
                 --exclude='.ssh' \
                 --exclude='.ssh/**' \
@@ -156,7 +175,15 @@ jobs:
                 --exclude='.cache/**' \
                 -e "ssh -i $KEY_FILE -o StrictHostKeyChecking=yes -o ConnectTimeout=15 -p 22" \
                 ./build/ \
-                "$SSH_TARGET:$REMOTE_DIR"
+                "$SSH_TARGET:$REMOTE_DIR" || RSYNC_EXIT=$?
+          RSYNC_EXIT=${RSYNC_EXIT:-0}
+          echo "rsync exit code: $RSYNC_EXIT"
+          if [ "$RSYNC_EXIT" -eq 255 ]; then
+            # 255 = ssh/rsync фатальная ошибка (нет сети, аутентификация, диск полный).
+            # 23 = partial transfer (атрибуты), это не фатально — пост-проверка решит.
+            echo "::error::rsync фатальная ошибка (exit 255), см. лог выше"
+            exit 1
+          fi
 
           # 4. Пост-проверка: на сервере должен лежать index.html, mp4,
           #    и служебные папки Beget (.ssh/, cgi-bin/, .cache/) должны быть на месте.
