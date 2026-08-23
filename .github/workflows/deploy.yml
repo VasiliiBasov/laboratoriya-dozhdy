@@ -133,21 +133,54 @@ jobs:
           fi
 
           # 3. Rsync build/ → public_html/
-          #    -a: archive, -v: verbose, --delete: синхронизировать (удалять лишнее)
-          #    --checksum: корректное обновление по содержимому
-          #    --exclude='.htaccess' — Beget имеет свой .htaccess, не затираем
+          #    -a: archive, -v: verbose, -O: --no-times (у нас нет прав на utimes() в public_html)
+          #    --checksum: обновление по содержимому (а не по размеру/timestamp)
+          #    БЕЗ --delete: на shared-хостинге это опасно (rsync может снести .ssh/,
+          #    cgi-bin/, .cache/ — Beget хранит в public_html служебные папки).
+          #    Старые ассеты (main.OLDHASH.js) остаются мусором, но не мешают:
+          #    index.html ссылается на новые хэши из asset-manifest.json.
+          #    --exclude='.htaccess' — Beget имеет свой .htaccess, не затираем.
           REMOTE_DIR=/home/l/lizaptsw/rain-lab.ru/public_html/
           echo "Deploying build/ → $SSH_TARGET:$REMOTE_DIR"
-          rsync -avz --checksum --delete \
+          rsync -avzO --checksum \
                 --exclude='.htaccess' \
                 -e "ssh -i $KEY_FILE -o StrictHostKeyChecking=yes -o ConnectTimeout=15 -p 22" \
                 ./build/ \
                 "$SSH_TARGET:$REMOTE_DIR"
 
-          # 4. Пост-проверка: на сервере должен лежать index.html
+          # 4. Пост-проверка: на сервере должен лежать index.html, mp4,
+          #    и служебные папки Beget (.ssh/, cgi-bin/, .cache/) должны быть на месте.
+          #    Используем heredoc, чтобы не возиться с экранированием кавычек.
           ssh -i "$KEY_FILE" \
               -o StrictHostKeyChecking=yes \
               -o ConnectTimeout=15 \
               -p 22 \
-              "$SSH_TARGET" "ls -la $REMOTE_DIR | head -20 && echo --- && test -f $REMOTE_DIR/index.html && echo 'index.html OK' || (echo 'index.html MISSING' && exit 1)"
+              "$SSH_TARGET" bash -s -- "$REMOTE_DIR" <<-'REMOTE_EOF'
+          REMOTE_DIR="$1"
+          echo "--- public_html/ (top 25) ---"
+          ls -la "$REMOTE_DIR" | head -25
+          echo "--- index.html ---"
+          if [ -f "$REMOTE_DIR/index.html" ]; then
+            echo "index.html OK ($(wc -c < "$REMOTE_DIR/index.html") bytes)"
+          else
+            echo "::error::index.html MISSING on server"
+            exit 1
+          fi
+          echo "--- bgVideo.mp4 ---"
+          shopt -s nullglob
+          vids=( "$REMOTE_DIR"/static/media/bgVideo.*.mp4 )
+          if [ ${#vids[@]} -gt 0 ]; then
+            echo "bgVideo.mp4 OK: ${vids[0]} ($(wc -c < "${vids[0]}") bytes)"
+          else
+            echo "::warning::bgVideo.mp4 NOT FOUND"
+          fi
+          echo "--- service folders (must survive) ---"
+          for d in .ssh cgi-bin .cache; do
+            if [ -e "$REMOTE_DIR$d" ]; then
+              echo "$d: present"
+            else
+              echo "::warning::$d: MISSING"
+            fi
+          done
+          REMOTE_EOF
           echo "✅ Deploy completed"
