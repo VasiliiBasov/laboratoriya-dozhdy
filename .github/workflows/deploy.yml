@@ -81,9 +81,11 @@ jobs:
       - name: Deploy via SFTP (rsync-style)
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ secrets.BEGET_HOST }}
+          # ⚠️ wlixcc fork использует СВОИ имена входов (см. Warning в логе run #4):
+          # host→server, privateKey→ssh_private_key, localPath→local_path, remotePath→remote_path
+          server: ${{ secrets.BEGET_HOST }}
           username: ${{ secrets.BEGET_USER }}
-          privateKey: ${{ secrets.BEGET_SSH_KEY }}
-          localPath: ./build/
-          remotePath: /home/l/lizaptsw/rain-lab.ru/public_html/
+          ssh_private_key: ${{ secrets.BEGET_SSH_KEY }}
+          local_path: ./build/
+          remote_path: /home/l/lizaptsw/rain-lab.ru/public_html/
           args: -o ConnectTimeout=15 -o StrictHostKeyChecking=yes
