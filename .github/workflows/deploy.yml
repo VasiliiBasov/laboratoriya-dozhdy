@@ -78,47 +78,60 @@ jobs:
           echo "lizaptsw.beget.tech ssh-ed25519 YMhPGeCEuTL7ar3PAikIsHeuq3vjbTx5lSwRb04SPeQ" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
-      # ---------- Диагностика приватного ключа ----------
-      # Run #5 упал: `Load key "../private_key.pem": invalid format`.
-      # Проверяем формат и целостность секрета BEGET_SSH_KEY, не раскрывая его тело.
-      - name: Debug SSH key
+      # ---------- Деплой через rsync по SSH ----------
+      # Run #5 показал: ключ валиден (ssh-keygen -l вернул корректный fingerprint ED25519),
+      # но wlixcc/SFTP-Deploy-Action@v1.2.4 портит формат при записи во временный файл
+      # (`Load key "../private_key.pem": invalid format`). Обходим экшн и деплоим нативным rsync.
+      # Секрет пишем через printf '%s\n', что доказало валидность (419 байт, ssh-keygen ok).
+      - name: Deploy via rsync over SSH
         env:
           BEGET_SSH_KEY: ${{ secrets.BEGET_SSH_KEY }}
         run: |
-          set +e
-          echo "=== secret length (chars) ==="
-          printf '%s' "$BEGET_SSH_KEY" | wc -c
-          echo "=== first line ==="
-          printf '%s\n' "$BEGET_SSH_KEY" | head -n 1
-          echo "=== last line ==="
-          printf '%s\n' "$BEGET_SSH_KEY" | tail -n 1
-          echo "=== total lines ==="
-          printf '%s\n' "$BEGET_SSH_KEY" | wc -l
-          echo "=== CRLF? ==="
-          printf '%s' "$BEGET_SSH_KEY" | od -c | head -1
-          echo "=== has trailing newline? ==="
-          last_char=$(printf '%s' "$BEGET_SSH_KEY" | tail -c 1)
-          if [ "$last_char" = "" ]; then echo "yes (ends with newline)"; else echo "no (last char: '$last_char')"; fi
-          echo "=== write to temp + ssh-keygen -l ==="
-          tmp=$(mktemp)
-          printf '%s\n' "$BEGET_SSH_KEY" > "$tmp"
-          chmod 600 "$tmp"
-          echo "--- temp file size (bytes) ---"
-          wc -c "$tmp"
-          echo "--- ssh-keygen -l (fingerprint only, key not printed) ---"
-          ssh-keygen -l -f "$tmp" 2>&1 || echo "ssh-keygen parse failed"
-          echo "--- head -c 50 (hex) ---"
-          head -c 50 "$tmp" | od -c | head -3
-          rm -f "$tmp"
+          set -euo pipefail
 
-      - name: Deploy via SFTP (rsync-style)
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          # ⚠️ wlixcc fork использует СВОИ имена входов (см. Warning в логе run #4):
-          # host→server, privateKey→ssh_private_key, localPath→local_path, remotePath→remote_path
-          server: ${{ secrets.BEGET_HOST }}
-          username: ${{ secrets.BEGET_USER }}
-          ssh_private_key: ${{ secrets.BEGET_SSH_KEY }}
-          local_path: ./build/
-          remote_path: /home/l/lizaptsw/rain-lab.ru/public_html/
-          args: -o ConnectTimeout=15 -o StrictHostKeyChecking=yes
+          # 1. Подготовка ключа в строго LF-формате с финальным \n
+          install -m 700 -d ~/.ssh
+          KEY_FILE=~/.ssh/beget_deploy_key
+          printf '%s\n' "$BEGET_SSH_KEY" > "$KEY_FILE"
+          chmod 600 "$KEY_FILE"
+
+          # Sanity-check: ключ должен парситься
+          if ! ssh-keygen -l -f "$KEY_FILE" >/dev/null 2>&1; then
+            echo "::error::BEGET_SSH_KEY невалиден после записи, ssh-keygen не смог распарсить"
+            ssh-keygen -l -f "$KEY_FILE" || true
+            exit 1
+          fi
+          echo "Key OK: $(ssh-keygen -l -f "$KEY_FILE")"
+
+          # 2. Проверка SSH-доступа (dry-run ssh)
+          SSH_TARGET="${{ secrets.BEGET_USER }}@${{ secrets.BEGET_HOST }}"
+          echo "Probing SSH to $SSH_TARGET..."
+          if ! ssh -i "$KEY_FILE" \
+                  -o BatchMode=yes \
+                  -o StrictHostKeyChecking=yes \
+                  -o ConnectTimeout=15 \
+                  -p 22 \
+                  "$SSH_TARGET" 'echo "SSH-OK: $(whoami)@$(hostname)"'; then
+            echo "::error::SSH-проверка провалилась. Проверьте authorized_keys на Beget и формат ключа."
+            exit 1
+          fi
+
+          # 3. Rsync build/ → public_html/
+          #    -a: archive, -v: verbose, --delete: синхронизировать (удалять лишнее)
+          #    --checksum: корректное обновление по содержимому
+          #    --exclude='.htaccess' — Beget имеет свой .htaccess, не затираем
+          REMOTE_DIR=/home/l/lizaptsw/rain-lab.ru/public_html/
+          echo "Deploying build/ → $SSH_TARGET:$REMOTE_DIR"
+          rsync -avz --checksum --delete \
+                --exclude='.htaccess' \
+                -e "ssh -i $KEY_FILE -o StrictHostKeyChecking=yes -o ConnectTimeout=15 -p 22" \
+                ./build/ \
+                "$SSH_TARGET:$REMOTE_DIR"
+
+          # 4. Пост-проверка: на сервере должен лежать index.html
+          ssh -i "$KEY_FILE" \
+              -o StrictHostKeyChecking=yes \
+              -o ConnectTimeout=15 \
+              -p 22 \
+              "$SSH_TARGET" "ls -la $REMOTE_DIR | head -20 && echo --- && test -f $REMOTE_DIR/index.html && echo 'index.html OK' || (echo 'index.html MISSING' && exit 1)"
+          echo "✅ Deploy completed"
