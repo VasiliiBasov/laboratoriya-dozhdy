@@ -78,6 +78,39 @@ jobs:
           echo "lizaptsw.beget.tech ssh-ed25519 YMhPGeCEuTL7ar3PAikIsHeuq3vjbTx5lSwRb04SPeQ" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
+      # ---------- Диагностика приватного ключа ----------
+      # Run #5 упал: `Load key "../private_key.pem": invalid format`.
+      # Проверяем формат и целостность секрета BEGET_SSH_KEY, не раскрывая его тело.
+      - name: Debug SSH key
+        env:
+          BEGET_SSH_KEY: ${{ secrets.BEGET_SSH_KEY }}
+        run: |
+          set +e
+          echo "=== secret length (chars) ==="
+          printf '%s' "$BEGET_SSH_KEY" | wc -c
+          echo "=== first line ==="
+          printf '%s\n' "$BEGET_SSH_KEY" | head -n 1
+          echo "=== last line ==="
+          printf '%s\n' "$BEGET_SSH_KEY" | tail -n 1
+          echo "=== total lines ==="
+          printf '%s\n' "$BEGET_SSH_KEY" | wc -l
+          echo "=== CRLF? ==="
+          printf '%s' "$BEGET_SSH_KEY" | od -c | head -1
+          echo "=== has trailing newline? ==="
+          last_char=$(printf '%s' "$BEGET_SSH_KEY" | tail -c 1)
+          if [ "$last_char" = "" ]; then echo "yes (ends with newline)"; else echo "no (last char: '$last_char')"; fi
+          echo "=== write to temp + ssh-keygen -l ==="
+          tmp=$(mktemp)
+          printf '%s\n' "$BEGET_SSH_KEY" > "$tmp"
+          chmod 600 "$tmp"
+          echo "--- temp file size (bytes) ---"
+          wc -c "$tmp"
+          echo "--- ssh-keygen -l (fingerprint only, key not printed) ---"
+          ssh-keygen -l -f "$tmp" 2>&1 || echo "ssh-keygen parse failed"
+          echo "--- head -c 50 (hex) ---"
+          head -c 50 "$tmp" | od -c | head -3
+          rm -f "$tmp"
+
       - name: Deploy via SFTP (rsync-style)
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
