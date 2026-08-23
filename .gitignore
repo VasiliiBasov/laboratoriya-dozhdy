@@ -50,3 +50,12 @@ yarn-error.log*
 Screenshot*
 Screen*
 
+# Временные блобы / кеш IDE и редакторов
+.tmp_blobs/
+*.tmp
+*.swp
+.idea/
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+
