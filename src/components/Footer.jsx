@@ -7,11 +7,11 @@ const Footer = () => {
         <footer className="footer">
             <div className="container">
                 <div className="footer-content">
-                    <div className="footer-logo">Лаборатория дождя</div>
+                    <div className="footer-logo">Р›Р°Р±РѕСЂР°С‚РѕСЂРёСЏ РґРѕР¶РґСЏ</div>
                     <div className="footer-contacts">
-                        <p>г. Санкт-Петербург</p>
+                        <p>Рі. РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі</p>
                         <p>+7 (999) 529-20-65</p>
-                        <p>info@rainlab.ru</p>
+                        <p>info@rain-lab.ru</p>
                     </div>
                     <div className="footer-social">
                         <a
@@ -26,13 +26,13 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="footer-copyright">
-                    © 2026 Лаборатория дождя. Все права защищены.
+                    В© 2026 Р›Р°Р±РѕСЂР°С‚РѕСЂРёСЏ РґРѕР¶РґСЏ. Р’СЃРµ РїСЂР°РІР° Р·Р°С‰РёС‰РµРЅС‹.
                 </div>
-                {/* Дата обновления (п. PDF «Дата обновления») + ссылка на политику */}
+                {/* Р”Р°С‚Р° РѕР±РЅРѕРІР»РµРЅРёСЏ (Рї. PDF В«Р”Р°С‚Р° РѕР±РЅРѕРІР»РµРЅРёСЏВ») + СЃСЃС‹Р»РєР° РЅР° РїРѕР»РёС‚РёРєСѓ */}
                 <div className="footer-updated">
-                    Обновлено: <time dateTime="2026-08-22">22 августа 2026 г.</time>
-                    {' · '}
-                    <Link to="/privacy">Политика конфиденциальности</Link>
+                    РћР±РЅРѕРІР»РµРЅРѕ: <time dateTime="2026-08-22">22 Р°РІРіСѓСЃС‚Р° 2026 Рі.</time>
+                    {' В· '}
+                    <Link to="/privacy">РџРѕР»РёС‚РёРєР° РєРѕРЅС„РёРґРµРЅС†РёР°Р»СЊРЅРѕСЃС‚Рё</Link>
                 </div>
             </div>
         </footer>

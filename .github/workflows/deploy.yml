@@ -1,8 +1,9 @@
-name: Deploy to Beget
+name: Deploy to Beget (rain-lab.ru)
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -27,12 +28,28 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy via SFTP
+      - name: Verify build output
+        run: |
+          if [ ! -f build/index.html ]; then
+            echo "::error::build/index.html not found — npm run build failed?"
+            exit 1
+          fi
+          echo "Build OK. Files:"
+          ls -la build/ | head -40
+
+      - name: Trust Beget host key
+        run: |
+          mkdir -p ~/.ssh
+          # Отпечаток хоста Beget (ed25519), уже сверен через WinSCP
+          echo "lizaptsw.beget.tech ssh-ed25519 YMhPGeCEuTL7ar3PAikIsHeuq3vjbTx5lSwRb04SPeQ" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy via SFTP (rsync-style)
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ secrets.BEGET_SFTP_HOST }}
-          username: ${{ secrets.BEGET_SFTP_USER }}
-          privateKey: ${{ secrets.BEGET_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.BEGET_HOST }}
+          username: ${{ secrets.BEGET_USER }}
+          privateKey: ${{ secrets.BEGET_SSH_KEY }}
           localPath: ./build/
-          remotePath: /home/l/lizaptsw/greenstone.ru/public_html/
-          args: -o ConnectTimeout=15 -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/dev/null
+          remotePath: /home/l/lizaptsw/rain-lab.ru/public_html/
+          args: -o ConnectTimeout=15 -o StrictHostKeyChecking=yes

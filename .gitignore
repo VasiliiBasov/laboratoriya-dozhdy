@@ -45,6 +45,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# SSH-debug screenshots from earlier sessions (transient, not shipped)
+src/assets/images/ssh_debug_*.png
+src/assets/images/latest_ssh_debug.png
+
 # Скриншоты из IDE/терминала могут содержать токены/пароли в выводе, не коммитим
 Снимок*
 Screenshot*

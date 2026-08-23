@@ -2,6 +2,7 @@
   "name": "laboratoriya-dozhdy",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://rain-lab.ru",
   "dependencies": {
     "@react-spring/three": "^9.6.1",
     "@react-three/drei": "^9.77.3",

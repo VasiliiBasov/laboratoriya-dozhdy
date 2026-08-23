@@ -10,25 +10,25 @@ import {
     FaMapMarkerAlt
 } from 'react-icons/fa';
 import maxIcon from '../assets/images/max-icon.svg';
-// Используем свои фото из папки pinterest/ — как и остальные страницы сайта.
+// РСЃРїРѕР»СЊР·СѓРµРј СЃРІРѕРё С„РѕС‚Рѕ РёР· РїР°РїРєРё pinterest/ вЂ” РєР°Рє Рё РѕСЃС‚Р°Р»СЊРЅС‹Рµ СЃС‚СЂР°РЅРёС†С‹ СЃР°Р№С‚Р°.
 import dripBeds from '../assets/images/pinterest/drip-beds.jpg';
 import rotorCutaway from '../assets/images/pinterest/rotor-cutaway.jpg';
 import '../styles/servicesPage.css';
 
-// Секции страницы контактов — единый стиль с портфолио (каждая на весь экран,
-// заголовок секции дублируется в хедере, в центре — описание + контент).
-// Секция 1 объединяет контакты и мессенджеры. Секция 2 — форма заявки.
+// РЎРµРєС†РёРё СЃС‚СЂР°РЅРёС†С‹ РєРѕРЅС‚Р°РєС‚РѕРІ вЂ” РµРґРёРЅС‹Р№ СЃС‚РёР»СЊ СЃ РїРѕСЂС‚С„РѕР»РёРѕ (РєР°Р¶РґР°СЏ РЅР° РІРµСЃСЊ СЌРєСЂР°РЅ,
+// Р·Р°РіРѕР»РѕРІРѕРє СЃРµРєС†РёРё РґСѓР±Р»РёСЂСѓРµС‚СЃСЏ РІ С…РµРґРµСЂРµ, РІ С†РµРЅС‚СЂРµ вЂ” РѕРїРёСЃР°РЅРёРµ + РєРѕРЅС‚РµРЅС‚).
+// РЎРµРєС†РёСЏ 1 РѕР±СЉРµРґРёРЅСЏРµС‚ РєРѕРЅС‚Р°РєС‚С‹ Рё РјРµСЃСЃРµРЅРґР¶РµСЂС‹. РЎРµРєС†РёСЏ 2 вЂ” С„РѕСЂРјР° Р·Р°СЏРІРєРё.
 const contactSections = [
     {
         id: 1,
         image: dripBeds,
-        title: 'Контакты',
+        title: 'РљРѕРЅС‚Р°РєС‚С‹',
         description:
-            'Свяжитесь с нами удобным для вас способом. Отвечаем в течение 30 минут в рабочее время.',
+            'РЎРІСЏР¶РёС‚РµСЃСЊ СЃ РЅР°РјРё СѓРґРѕР±РЅС‹Рј РґР»СЏ РІР°СЃ СЃРїРѕСЃРѕР±РѕРј. РћС‚РІРµС‡Р°РµРј РІ С‚РµС‡РµРЅРёРµ 30 РјРёРЅСѓС‚ РІ СЂР°Р±РѕС‡РµРµ РІСЂРµРјСЏ.',
         contacts: {
             phone: '+7 (999) 529-20-65',
-            email: 'info@rainlab.ru',
-            address: 'Санкт-Петербург и Ленинградская область',
+            email: 'info@rain-lab.ru',
+            address: 'РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі Рё Р›РµРЅРёРЅРіСЂР°РґСЃРєР°СЏ РѕР±Р»Р°СЃС‚СЊ',
             whatsapp: 'https://wa.me/79995292065',
             telegram: 'https://t.me/+79995292065',
             max: 'https://max.ru/u/f9LHodD0cOI0N1nmW808lpfczahN0wCuCwYwQbIM4xZu8BVNOcdsYcSA3qQ'
@@ -37,9 +37,9 @@ const contactSections = [
     {
         id: 2,
         image: rotorCutaway,
-        title: 'Оставить заявку',
+        title: 'РћСЃС‚Р°РІРёС‚СЊ Р·Р°СЏРІРєСѓ',
         description:
-            'Заполните форму и мы свяжемся с вами в ближайшее время, чтобы обсудить ваш проект.'
+            'Р—Р°РїРѕР»РЅРёС‚Рµ С„РѕСЂРјСѓ Рё РјС‹ СЃРІСЏР¶РµРјСЃСЏ СЃ РІР°РјРё РІ Р±Р»РёР¶Р°Р№С€РµРµ РІСЂРµРјСЏ, С‡С‚РѕР±С‹ РѕР±СЃСѓРґРёС‚СЊ РІР°С€ РїСЂРѕРµРєС‚.'
     }
 ];
 
@@ -48,18 +48,18 @@ const ContactPage = ({ onTitleChange }) => {
     const sectionRefs = useRef([]);
     const [activeIndex, setActiveIndex] = useState(0);
 
-    // Состояние формы
+    // РЎРѕСЃС‚РѕСЏРЅРёРµ С„РѕСЂРјС‹
     const [formData, setFormData] = useState({ name: '', phone: '', email: '', message: '' });
     const handleChange = (e) =>
         setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Заявка:', formData);
-        alert('Спасибо! Мы свяжемся с вами в ближайшее время.');
+        console.log('Р—Р°СЏРІРєР°:', formData);
+        alert('РЎРїР°СЃРёР±Рѕ! РњС‹ СЃРІСЏР¶РµРјСЃСЏ СЃ РІР°РјРё РІ Р±Р»РёР¶Р°Р№С€РµРµ РІСЂРµРјСЏ.');
         setFormData({ name: '', phone: '', email: '', message: '' });
     };
 
-    // Сброс скролла и наблюдатель за секциями
+    // РЎР±СЂРѕСЃ СЃРєСЂРѕР»Р»Р° Рё РЅР°Р±Р»СЋРґР°С‚РµР»СЊ Р·Р° СЃРµРєС†РёСЏРјРё
     useEffect(() => {
         if ('scrollRestoration' in window.history) {
             window.history.scrollRestoration = 'manual';
@@ -89,7 +89,7 @@ const ContactPage = ({ onTitleChange }) => {
         return () => observer.disconnect();
     }, []);
 
-    // Сообщаем App о смене активной секции — заголовок отрисуется в хедере
+    // РЎРѕРѕР±С‰Р°РµРј App Рѕ СЃРјРµРЅРµ Р°РєС‚РёРІРЅРѕР№ СЃРµРєС†РёРё вЂ” Р·Р°РіРѕР»РѕРІРѕРє РѕС‚СЂРёСЃСѓРµС‚СЃСЏ РІ С…РµРґРµСЂРµ
     useEffect(() => {
         if (onTitleChange) {
             onTitleChange(contactSections[activeIndex]?.title || '');
@@ -99,12 +99,12 @@ const ContactPage = ({ onTitleChange }) => {
     return (
         <div className="portfolio-scroll-container" ref={containerRef}>
             <SeoHead
-                title="Контакты"
-                description="Свяжитесь с TheGreenStone: телефон, WhatsApp, Telegram, MAX, e-mail. Санкт-Петербург и Ленинградская область. Отвечаем за 30 минут."
+                title="РљРѕРЅС‚Р°РєС‚С‹"
+                description="РЎРІСЏР¶РёС‚РµСЃСЊ СЃ Rain-Lab: С‚РµР»РµС„РѕРЅ, WhatsApp, Telegram, MAX, e-mail. РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі Рё Р›РµРЅРёРЅРіСЂР°РґСЃРєР°СЏ РѕР±Р»Р°СЃС‚СЊ. РћС‚РІРµС‡Р°РµРј Р·Р° 30 РјРёРЅСѓС‚."
                 path="/contact"
-                h1="Контакты TheGreenStone — связаться с нами"
+                h1="РљРѕРЅС‚Р°РєС‚С‹ Rain-Lab вЂ” СЃРІСЏР·Р°С‚СЊСЃСЏ СЃ РЅР°РјРё"
             />
-            <Breadcrumbs items={[{ label: 'Контакты', path: '/contact' }]} />
+            <Breadcrumbs items={[{ label: 'РљРѕРЅС‚Р°РєС‚С‹', path: '/contact' }]} />
 
             {contactSections.map((item, index) => (
                 <section
@@ -120,7 +120,7 @@ const ContactPage = ({ onTitleChange }) => {
                     <div className="portfolio-content-center">
                         <p className="portfolio-section-desc">{item.description}</p>
 
-                        {/* Секция 1 — контакты + мессенджеры (объединены) */}
+                        {/* РЎРµРєС†РёСЏ 1 вЂ” РєРѕРЅС‚Р°РєС‚С‹ + РјРµСЃСЃРµРЅРґР¶РµСЂС‹ (РѕР±СЉРµРґРёРЅРµРЅС‹) */}
                         {item.contacts && (
                             <>
                                 <div className="pci-row">
@@ -144,7 +144,7 @@ const ContactPage = ({ onTitleChange }) => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="pci-item"
-                                        title="Написать в MAX"
+                                        title="РќР°РїРёСЃР°С‚СЊ РІ MAX"
                                     >
                                         <img
                                             src={maxIcon}
@@ -158,7 +158,7 @@ const ContactPage = ({ onTitleChange }) => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="pci-item"
-                                        title="Написать в WhatsApp"
+                                        title="РќР°РїРёСЃР°С‚СЊ РІ WhatsApp"
                                     >
                                         <FaWhatsapp />
                                         <span>WhatsApp</span>
@@ -168,7 +168,7 @@ const ContactPage = ({ onTitleChange }) => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="pci-item"
-                                        title="Написать в Telegram"
+                                        title="РќР°РїРёСЃР°С‚СЊ РІ Telegram"
                                     >
                                         <FaTelegram />
                                         <span>Telegram</span>
@@ -177,23 +177,23 @@ const ContactPage = ({ onTitleChange }) => {
                             </>
                         )}
 
-                        {/* Секция 2 — форма заявки */}
+                        {/* РЎРµРєС†РёСЏ 2 вЂ” С„РѕСЂРјР° Р·Р°СЏРІРєРё */}
                         {item.id === 2 && (
                             <form className="portfolio-contact-form" onSubmit={handleSubmit}>
                                 <div className="pcf-group">
-                                    <label htmlFor="cp-name">Ваше имя</label>
+                                    <label htmlFor="cp-name">Р’Р°С€Рµ РёРјСЏ</label>
                                     <input
                                         id="cp-name"
                                         type="text"
                                         name="name"
-                                        placeholder="Иван Иванов"
+                                        placeholder="РРІР°РЅ РРІР°РЅРѕРІ"
                                         value={formData.name}
                                         onChange={handleChange}
                                         required
                                     />
                                 </div>
                                 <div className="pcf-group">
-                                    <label htmlFor="cp-phone">Телефон</label>
+                                    <label htmlFor="cp-phone">РўРµР»РµС„РѕРЅ</label>
                                     <input
                                         id="cp-phone"
                                         type="tel"
@@ -216,18 +216,18 @@ const ContactPage = ({ onTitleChange }) => {
                                     />
                                 </div>
                                 <div className="pcf-group">
-                                    <label htmlFor="cp-message">Сообщение</label>
+                                    <label htmlFor="cp-message">РЎРѕРѕР±С‰РµРЅРёРµ</label>
                                     <textarea
                                         id="cp-message"
                                         name="message"
-                                        placeholder="Расскажите о вашем проекте..."
+                                        placeholder="Р Р°СЃСЃРєР°Р¶РёС‚Рµ Рѕ РІР°С€РµРј РїСЂРѕРµРєС‚Рµ..."
                                         rows="4"
                                         value={formData.message}
                                         onChange={handleChange}
                                     />
                                 </div>
                                 <button type="submit" className="pcf-submit">
-                                    Отправить заявку
+                                    РћС‚РїСЂР°РІРёС‚СЊ Р·Р°СЏРІРєСѓ
                                 </button>
                             </form>
                         )}
@@ -239,7 +239,7 @@ const ContactPage = ({ onTitleChange }) => {
                 <Footer />
             </section>
 
-            {/* Индикатор текущего раздела */}
+            {/* РРЅРґРёРєР°С‚РѕСЂ С‚РµРєСѓС‰РµРіРѕ СЂР°Р·РґРµР»Р° */}
             <div className="portfolio-indicator">
                 <span className="indicator-current">
                     {String(activeIndex + 1).padStart(2, '0')}

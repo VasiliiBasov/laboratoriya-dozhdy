@@ -3,8 +3,8 @@ User-agent: *
 Allow: /
 Disallow:
 
-# Карта сайта для поисковых систем (требование отчёта beget)
-Sitemap: https://thegreenstone.ru/sitemap.xml
+# РљР°СЂС‚Р° СЃР°Р№С‚Р° РґР»СЏ РїРѕРёСЃРєРѕРІС‹С… СЃРёСЃС‚РµРј (С‚СЂРµР±РѕРІР°РЅРёРµ РѕС‚С‡С‘С‚Р° beget)
+Sitemap: https://rain-lab.ru/sitemap.xml
 
-# Яндексу — главное зеркало
-Host: https://thegreenstone.ru
+# РЇРЅРґРµРєСЃСѓ вЂ” РіР»Р°РІРЅРѕРµ Р·РµСЂРєР°Р»Рѕ
+Host: https://rain-lab.ru
