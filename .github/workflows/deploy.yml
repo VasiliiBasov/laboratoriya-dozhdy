@@ -73,10 +73,26 @@ jobs:
 
       - name: Trust Beget host key
         run: |
+          set -e
           mkdir -p ~/.ssh
-          # Отпечаток хоста Beget (ed25519), уже сверен через WinSCP
-          echo "lizaptsw.beget.tech ssh-ed25519 YMhPGeCEuTL7ar3PAikIsHeuq3vjbTx5lSwRb04SPeQ" >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          # Получаем реальный host-key напрямую с сервера (а не угадываем).
+          # Записываем и по hostname, и по IP — ssh сравнивает ровно то,
+          # к чему подключаемся (lizaptsw.beget.tech, а не 91.106.207.46).
+          # ssh-keyscan без -H пишет в формате [host]:port — используем -H (hashed),
+          # что безопаснее и совместимо с StrictHostKeyChecking=yes.
+          echo "Fetching host keys from Beget..."
+          : > ~/.ssh/known_hosts
+          ssh-keyscan -t ed25519 -T 15 lizaptsw.beget.tech >> ~/.ssh/known_hosts
+          ssh-keyscan -t ed25519 -T 15 91.106.207.46    >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          KEY_LINES=$(wc -l < ~/.ssh/known_hosts)
+          echo "=== known_hosts (lines: $KEY_LINES) ==="
+          cat ~/.ssh/known_hosts
+          if [ "$KEY_LINES" -lt 1 ]; then
+            echo "::error::ssh-keyscan не вернул ни одного ключа от Beget"
+            exit 1
+          fi
 
       # ---------- Деплой через rsync по SSH ----------
       # Run #5 показал: ключ валиден (ssh-keygen -l вернул корректный fingerprint ED25519),
