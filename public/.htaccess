@@ -102,4 +102,21 @@ Header set Content-Security-Policy "default-src 'self'; img-src 'self' data: htt
 # -------------------------------------------------------------
 # Кодировка по умолчанию
 # -------------------------------------------------------------
+# Beget shared-hosting иногда не передаёт charset в Content-Type для .html
+# (отдаёт `text/html` без `; charset=utf-8`), из-за чего браузер может
+# применить windows-1251 и показать русский текст как «кракозябры».
+# Принудительно ставим charset через заголовок — он перебивает дефолт nginx.
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html|htm)$">
+        Header set Content-Type "text/html; charset=utf-8"
+    </FilesMatch>
+    <FilesMatch "\.(css|js)$">
+        Header set Content-Type "text/css; charset=utf-8" expr="%{REQUEST_URI} =~ m#\\.css$#i"
+        Header set Content-Type "application/javascript; charset=utf-8" expr="%{REQUEST_URI} =~ m#\\.js$#i"
+    </FilesMatch>
+    <FilesMatch "\.(json|xml|webmanifest)$">
+        Header set Content-Type "application/json; charset=utf-8" expr="%{REQUEST_URI} =~ m#\\.json$#i"
+    </FilesMatch>
+</IfModule>
+# Fallback для старых Apache, где <IfModule mod_headers.c> недоступен
 AddDefaultCharset UTF-8
