@@ -11,6 +11,9 @@ function Header({ portfolioTitle = '' }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [displayedTitle, setDisplayedTitle] = useState(portfolioTitle);
     const [titleFading, setTitleFading] = useState(false);
+    // Скрывает заголовок в хедере, когда в viewport виден футер
+    // (на последней секции scroll-snap, иначе заголовок накладывается на содержимое футера).
+    const [footerInView, setFooterInView] = useState(false);
     const location = useLocation();
     // Полноэкранные страницы в едином стиле — на них показывается заголовок текущего раздела в хедере.
     // Главную ('/') намеренно НЕ включаем: на ней большой центральный заголовок в .hero-content,
@@ -55,6 +58,39 @@ function Header({ portfolioTitle = '' }) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Следим за появлением .portfolio-footer-section в viewport на fullscreen-страницах.
+    // Когда он появляется (scroll-snap привёл к футеру) — скрываем заголовок хедера,
+    // чтобы он не накладывался на контент футера.
+    useEffect(() => {
+        if (!isFullscreen) {
+            setFooterInView(false);
+            return undefined;
+        }
+
+        const footer = document.querySelector('.portfolio-footer-section');
+        if (!footer) return undefined;
+
+        // root = .portfolio-scroll-container (он инициатор скролла на fullscreen-страницах).
+        // Если его нет (например, переход между страницами), fallback на null (=viewport).
+        const scrollRoot = document.querySelector('.portfolio-scroll-container');
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                // entries[0].intersectionRatio > 0 — футер частично виден.
+                // Используем threshold 0.15 — секция футера ~высоты viewport, поэтому
+                // как только 15% появилось — заголовок пора прятать.
+                setFooterInView(entries.some((e) => e.intersectionRatio > 0.15));
+            },
+            {
+                root: scrollRoot,
+                threshold: [0, 0.15, 0.5, 1],
+            },
+        );
+
+        observer.observe(footer);
+        return () => observer.disconnect();
+    }, [isFullscreen, location.pathname]);
+
     return (
         <header className={`site-header ${isScrolled ? 'scrolled' : ''} ${mobileMenuOpen ? 'mobile-open' : ''}`}>
             <div className="header-container">
@@ -66,8 +102,9 @@ function Header({ portfolioTitle = '' }) {
 
                 {/* Название текущего объекта портфолио — отображается только на странице портфолио.
                     Блок всегда в DOM, чтобы не дёргать остальные элементы хедера при переключении страниц.
-                    Показ/скрытие — плавно через opacity. */}
-                <div className={`portfolio-header-title ${isFullscreen && displayedTitle ? 'visible' : ''} ${titleFading ? 'fade' : ''}`}>
+                    Показ/скрытие — плавно через opacity.
+                    Скрывается на последней секции (футер) — иначе заголовок накладывается на содержимое футера. */}
+                <div className={`portfolio-header-title ${isFullscreen && displayedTitle && !footerInView ? 'visible' : ''} ${titleFading || footerInView ? 'fade' : ''}`}>
                     {displayedTitle && <h2>{displayedTitle}</h2>}
                 </div>
 

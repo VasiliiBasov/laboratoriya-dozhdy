@@ -1,64 +1,53 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-// Р‘Р°Р·РѕРІС‹Р№ РґРѕРјРµРЅ СЃР°Р№С‚Р° вЂ” РµРґРёРЅР°СЏ С‚РѕС‡РєР° РїСЂР°РІРґС‹ РґР»СЏ canonical Рё og:url.
-// Р•СЃР»Рё Р±СѓРґРµС‚Рµ РїРµСЂРµРµР·Р¶Р°С‚СЊ РЅР° https СЃ РґСЂСѓРіРёРј РґРѕРјРµРЅРѕРј вЂ” РјРµРЅСЏР№С‚Рµ С‚РѕР»СЊРєРѕ СЌС‚Сѓ РєРѕРЅСЃС‚Р°РЅС‚Сѓ.
+// Базовый домен сайта — единая точка правды для canonical и og:url.
+// Если будете переезжать на https с другим доменом — меняйте только эту константу.
 const SITE_URL = 'https://rain-lab.ru';
-const SITE_NAME = 'Rain-Lab вЂ” Р›Р°Р±РѕСЂР°С‚РѕСЂРёСЏ РґРѕР¶РґСЏ';
+const SITE_NAME = 'Rain-Lab — Лаборатория дождя';
 const DEFAULT_DESCRIPTION =
-    'РџСЂРѕРµРєС‚РёСЂРѕРІР°РЅРёРµ, РјРѕРЅС‚Р°Р¶ Рё РѕР±СЃР»СѓР¶РёРІР°РЅРёРµ СЃРёСЃС‚РµРј Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РїРѕР»РёРІР° РІ РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРіРµ Рё Р›РµРЅРёРЅРіСЂР°РґСЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё. РђРІС‚РѕРїРѕР»РёРІ РїРѕРґ РєР»СЋС‡ вЂ” Р±РѕР»РµРµ 200 РїСЂРѕРµРєС‚РѕРІ.';
+    'Проектирование, монтаж и обслуживание систем автоматического полива в Санкт-Петербурге и Ленинградской области. Автополив под ключ — более 200 проектов.';
 
-// РљРѕРјРїР°РЅРёСЏ-РїРѕСЃС‚Р°РІС‰РёРє РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ. РЈРїРѕРјРёРЅР°РµС‚СЃСЏ РІ JSON-LD (Organization.brand)
-// Рё РІ РјРёРєСЂРѕСЂР°Р·РјРµС‚РєРµ Schema.org. РќР° СЃР°РјРѕРј СЃР°Р№С‚Рµ С‚РµРєСЃС‚РѕРј РќР• РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ,
-// С‡С‚РѕР±С‹ РЅРµ РјРµРЅСЏС‚СЊ РґРёР·Р°Р№РЅ вЂ” РЅРѕ РїРѕРёСЃРєРѕРІРёРєРё РІРёРґСЏС‚.
-const BRAND_NAME = 'РџРѕР»РёРІС‚РѕСЂРі';
+// Компания-поставщик оборудования. Упоминается в JSON-LD (Organization.brand)
+// и в микроразметке Schema.org. На самом сайте текстом НЕ показывается,
+// чтобы не менять дизайн — но поисковики видят.
+const BRAND_NAME = 'Поливторг';
 
-// SeoHead СЂРµС€Р°РµС‚ РґРІРµ Р·Р°РґР°С‡Рё РёР· SEO-РѕС‚С‡С‘С‚Р° beget:
-//   1. РћР±РЅРѕРІРёС‚СЊ <head>: title / description / canonical / og:* / twitter:* /
-//      author / dateModified / inLanguage. Р”РµР»Р°РµС‚СЃСЏ С‡РµСЂРµР· <Helmet> вЂ” РѕРЅ
-//      РєР»Р°РґС‘С‚ РІСЃС‘ СЃС‚СЂРѕРіРѕ РІ <head>.
-//   2. РћРґРёРЅ (Рё С‚РѕР»СЊРєРѕ РѕРґРёРЅ) РІРёРґРёРјС‹Р№/СЃРєСЂС‹С‚С‹Р№ <h1> РЅР° СЃС‚СЂР°РЅРёС†Рµ вЂ”
-//      В«РіР»Р°РІРЅС‹Р№ Р·Р°РіРѕР»РѕРІРѕРє СЃС‚СЂР°РЅРёС†С‹В» РїРѕ SEO. Р РµРЅРґРµСЂРёС‚СЃСЏ РћРўР”Р•Р›Р¬РќРћ РѕС‚ <Helmet>,
-//      РїРѕС‚РѕРјСѓ С‡С‚Рѕ Helmet РїСЂРёРЅРёРјР°РµС‚ С‚РѕР»СЊРєРѕ С‚РµРіРё РґР»СЏ <head>; <h1> РІ <head>
-//      РЅРµРІР°Р»РёРґРµРЅ Рё React РїР°РґР°РµС‚ СЃ Invariant Violation.
+// SeoHead решает две задачи из SEO-отчёта beget:
+//   1. Обновить <head>: title / description / canonical / og:* / twitter:* /
+//      author / dateModified / inLanguage. Делается через <Helmet> — он
+//      кладёт всё строго в <head>.
+//   2. Один (и только один) видимый/скрытый <h1> на странице —
+//      «главный заголовок страницы» по SEO. Рендерится ОТДЕЛЬНО от <Helmet>,
+//      потому что Helmet принимает только теги для <head>; <h1> в <head>
+//      невалиден и React падает с Invariant Violation.
 //
-// РџР°СЂР°РјРµС‚СЂС‹:
-//   - title:        Р·Р°РіРѕР»РѕРІРѕРє СЃС‚СЂР°РЅРёС†С‹. РџРѕРґРјРµС€РёРІР°РµС‚СЃСЏ Рє SITE_NAME.
-//   - description:  meta description. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ DEFAULT_DESCRIPTION.
-//   - path:         РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№ РїСѓС‚СЊ Р±РµР· РґРѕРјРµРЅР° (РЅР°РїСЂРёРјРµСЂ "/services").
-//   - h1:           РѕР±СЏР·Р°С‚РµР»РµРЅ. РўРµРєСЃС‚ РіР»Р°РІРЅРѕРіРѕ H1 РЅР° СЃС‚СЂР°РЅРёС†Рµ.
-//   - h1Hidden:     РµСЃР»Рё true (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ), H1 РІРёР·СѓР°Р»СЊРЅРѕ СЃРєСЂС‹С‚ (visually-hidden),
-//                   С‡С‚РѕР±С‹ РЅРµ РјРµРЅСЏС‚СЊ РґРёР·Р°Р№РЅ. РџРµСЂРµРґР°Р№С‚Рµ false, РµСЃР»Рё СЃС‚СЂР°РЅРёС†Р°
-//                   СЃР°РјР° РґРѕР»Р¶РЅР° РїРѕРєР°Р·С‹РІР°С‚СЊ СЃРІРѕР№ H1 РІ РІРёРґРёРјРѕРј РєРѕРЅС‚РµРЅС‚Рµ.
-//   - dateModified: ISO-РґР°С‚Р° РѕР±РЅРѕРІР»РµРЅРёСЏ СЃС‚СЂР°РЅРёС†С‹ (YYYY-MM-DD).
-//                   РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ Schema.org WebPage.dateModified Рё meta name="date".
-//   - author:       СЃС‚СЂРѕРєР°-Р°РІС‚РѕСЂ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ SITE_NAME.
+// Параметры:
+//   - title:        заголовок страницы. Подмешивается к SITE_NAME.
+//   - description:  meta description. По умолчанию DEFAULT_DESCRIPTION.
+//   - path:         относительный путь без домена (например "/services").
+//   - h1:           обязателен. Текст главного H1 на странице.
+//   - h1Hidden:     если true (по умолчанию), H1 визуально скрыт (visually-hidden),
+//                   чтобы не менять дизайн. Передайте false, если страница
+//                   сама должна показывать свой H1 в видимом контенте.
+//   - dateModified: ISO-дата обновления страницы (YYYY-MM-DD).
+//                   Используется в Schema.org WebPage.dateModified и meta name="date".
+//   - author:       строка-автор. По умолчанию SITE_NAME.
 const SeoHead = ({
     title,
     description = DEFAULT_DESCRIPTION,
-    // path вЂ” РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Р№ РїСѓС‚СЊ Р‘Р•Р— РґРѕРјРµРЅР° (РЅР°РїСЂРёРјРµСЂ "/services").
-    // РџРѕР»РЅС‹Р№ URL СЃРѕР±РµСЂС‘С‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РєР°Рє SITE_URL + path.
     path = '/',
-    // h1 вЂ” РѕР±СЏР·Р°С‚РµР»РµРЅ. Р­С‚Рѕ В«РіР»Р°РІРЅС‹Р№ Р·Р°РіРѕР»РѕРІРѕРє СЃС‚СЂР°РЅРёС†С‹В» РїРѕ SEO.
-    // Р РµРЅРґРµСЂРёРј visually-hidden, С‡С‚РѕР±С‹ РІРЅРµС€РЅРёР№ РІРёРґ СЃС‚СЂР°РЅРёС† РЅРµ РјРµРЅСЏР»СЃСЏ.
     h1,
-    // h1Hidden вЂ” РµСЃР»Рё true (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ), H1 РІРёР·СѓР°Р»СЊРЅРѕ СЃРєСЂС‹С‚ (visually-hidden).
-    // Р•СЃР»Рё false, H1 Р±СѓРґРµС‚ РІРёРґРёРјС‹Рј вЂ” РёСЃРїРѕР»СЊР·СѓР№С‚Рµ СЌС‚Рѕ, РєРѕРіРґР° РґРёР·Р°Р№РЅ СЃС‚СЂР°РЅРёС†С‹
-    // РїСЂРµРґРїРѕР»Р°РіР°РµС‚ СЏРІРЅС‹Р№ Р·Р°РіРѕР»РѕРІРѕРє.
     h1Hidden = true,
-    // ISO-РґР°С‚Р° РѕР±РЅРѕРІР»РµРЅРёСЏ СЃС‚СЂР°РЅРёС†С‹ (YYYY-MM-DD). Р•СЃР»Рё РЅРµ СѓРєР°Р·Р°РЅР° вЂ” СЃРµРіРѕРґРЅСЏ.
     dateModified,
-    // РђРІС‚РѕСЂ СЃС‚СЂР°РЅРёС†С‹ (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ вЂ” SITE_NAME).
     author = SITE_NAME,
 }) => {
-    const fullTitle = title ? `${title} вЂ” ${SITE_NAME}` : SITE_NAME;
+    const fullTitle = title ? `${title} — ${SITE_NAME}` : SITE_NAME;
     const fullUrl = `${SITE_URL}${path}`;
-    // Р•СЃР»Рё dateModified РЅРµ РїРµСЂРµРґР°РЅ вЂ” Р±РµСЂС‘Рј СЃРµРіРѕРґРЅСЏ РІ ISO-С„РѕСЂРјР°С‚Рµ (YYYY-MM-DD).
-    const resolvedDate =
-        dateModified || new Date().toISOString().slice(0, 10);
+    const resolvedDate = dateModified || new Date().toISOString().slice(0, 10);
 
-    // JSON-LD WebPage вЂ” СЂР°СЃС€РёСЂРµРЅРЅР°СЏ РјРёРєСЂРѕСЂР°Р·РјРµС‚РєР° (Рї. В«РЎРµРјР°РЅС‚РёС‡РµСЃРєР°СЏ СЂР°Р·РјРµС‚РєР°В»
-    // Рё Рї. В«Р Р°СЃС€РёСЂРµРЅРЅС‹Рµ РґР°РЅРЅС‹РµВ» РёР· РѕС‚С‡С‘С‚Р° beget). РќРµРІРёРґРёРјРѕ РґР»СЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.
+    // JSON-LD WebPage — расширенная микроразметка (п. «Семантическая разметка»
+    // и п. «Расширенные данные» из отчёта beget). Невидимо, в <head>.
     const webPageJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
@@ -89,30 +78,28 @@ const SeoHead = ({
             logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
         },
     };
-
-    return (
+return (
         <>
-            {/* === HEAD: РјРµС‚Р°-С‚РµРіРё, og, twitter, canonical === */}
+            {/* === HEAD: мета-теги, og, twitter, canonical === */}
             <Helmet>
-                {/* Р‘Р°Р·РѕРІС‹Рµ */}
+                {/* Базовые */}
                 <html lang="ru" />
                 <title>{fullTitle}</title>
                 <meta name="description" content={description} />
                 <meta name="author" content={author} />
                 <meta name="date" content={resolvedDate} />
-                <meta name="generator" content="Rain-Lab" />
 
-                {/* Canonical вЂ” РіР»Р°РІРЅРѕРµ С‚СЂРµР±РѕРІР°РЅРёРµ РѕС‚С‡С‘С‚Р° beget, Рї. В«РљР°РЅРѕРЅРёС‡РµСЃРєРёР№ URLВ» */}
+                {/* Canonical — главное требование отчёта beget, п. «Канонический URL» */}
                 <link rel="canonical" href={fullUrl} />
 
-                {/* Open Graph вЂ” Рї. В«РњРµС‚Р°-С‚РµРіРё СЃРѕС†РёР°Р»СЊРЅС‹С… СЃРµС‚РµР№В» */}
+                {/* Open Graph — п. «Мета-теги социальных сетей» */}
                 <meta property="og:type" content="website" />
                 <meta property="og:site_name" content={SITE_NAME} />
                 <meta property="og:locale" content="ru_RU" />
                 <meta property="og:title" content={fullTitle} />
                 <meta property="og:description" content={description} />
                 <meta property="og:url" content={fullUrl} />
-                {/* РљР°СЂС‚РёРЅРєР° РґР»СЏ С€РµСЂРёРЅРіР°. РџРѕР»РѕР¶РёС‚Рµ og-image.jpg 1200x630 РІ public/ */}
+                {/* Картинка для шеринга. Положите og-image.jpg 1200x630 в public/ */}
                 <meta property="og:image" content={`${SITE_URL}/og-image.jpg`} />
 
                 {/* Twitter Cards */}
@@ -121,40 +108,40 @@ const SeoHead = ({
                 <meta name="twitter:description" content={description} />
                 <meta name="twitter:image" content={`${SITE_URL}/og-image.jpg`} />
 
-                {/* Р”РѕРї. SEO-С‚РµРіРё вЂ” Beget Рё РЇРЅРґРµРєСЃ Р»СЋР±СЏС‚ РёС… РІРёРґРµС‚СЊ */}
+                {/* Доп. SEO-теги — Beget и Яндекс любят их видеть */}
                 <meta name="theme-color" content="#0b3a25" />
                 <meta name="rating" content="general" />
                 <meta name="distribution" content="global" />
                 <meta name="revisit-after" content="7 days" />
                 <meta name="copyright" content={SITE_NAME} />
                 <meta name="geo.region" content="RU-SPE" />
-                <meta name="geo.placename" content="РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі" />
+                <meta name="geo.placename" content="Санкт-Петербург" />
                 <meta name="geo.position" content="59.9311;30.3609" />
                 <meta name="ICBM" content="59.9311, 30.3609" />
                 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
                 <meta name="googlebot" content="index, follow" />
                 <meta name="yandex-verification" content="" />
 
-                {/* Hreflang вЂ” РґР»СЏ РіР»Р°РІРЅРѕР№ СѓРєР°Р·С‹РІР°РµРј СЃРµР±СЏ Р¶Рµ */}
+                {/* Hreflang — для главной указываем себя же */}
                 {path === '/' && (
                     <link rel="alternate" hrefLang="ru-RU" href={fullUrl} />
                 )}
                 <link rel="alternate" hrefLang="x-default" href={fullUrl} />
 
-                {/* Preconnect Рє РІРЅРµС€РЅРёРј СЂРµСЃСѓСЂСЃР°Рј (СѓСЃРєРѕСЂСЏРµС‚ РїРµСЂРІС‹Р№ СЂРµРЅРґРµСЂ) */}
+                {/* Preconnect к внешним ресурсам (ускоряет первый рендер) */}
                 <link rel="dns-prefetch" href="//mc.yandex.ru" />
                 <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
-                {/* Р Р°СЃС€РёСЂРµРЅРЅС‹Р№ JSON-LD WebPage (РЅРµРІРёРґРёРјРѕ, РІ <head>) */}
+                {/* Расширенный JSON-LD WebPage (невидимо, в <head>) */}
                 <script type="application/ld+json">
                     {JSON.stringify(webPageJsonLd)}
                 </script>
             </Helmet>
 
-            {/* === BODY: РіР»Р°РІРЅС‹Р№ H1 СЃС‚СЂР°РЅРёС†С‹ (РІРёР·СѓР°Р»СЊРЅРѕ СЃРєСЂС‹С‚ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ) ===
-                Р РµРЅРґРµСЂРёРј Р’РќР• <Helmet>, РїРѕС‚РѕРјСѓ С‡С‚Рѕ Helmet РїСЂРёРЅРёРјР°РµС‚ С‚РѕР»СЊРєРѕ
-                С‚РµРіРё, РґРѕРїСѓСЃС‚РёРјС‹Рµ РІРЅСѓС‚СЂРё <head>. <h1> РґРѕР»Р¶РµРЅ Р¶РёС‚СЊ РІ <body>.
-                РЎРєСЂС‹РІР°РµС‚СЃСЏ С‡РµСЂРµР· РєР»Р°СЃСЃ .visually-hidden РІ main.css. */}
+            {/* === BODY: главный H1 страницы (визуально скрыт по умолчанию) ===
+                Рендерим ВНЕ <Helmet>, потому что Helmet принимает только
+                теги, допустимые внутри <head>. <h1> должен жить в <body>.
+                Скрывается через класс .visually-hidden в main.css. */}
             {h1 && (
                 <h1 className={h1Hidden ? 'visually-hidden' : undefined}>{h1}</h1>
             )}

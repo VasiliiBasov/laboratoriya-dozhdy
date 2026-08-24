@@ -110,6 +110,7 @@
 
 .portfolio-header-title.fade {
     opacity: 0;
+    visibility: hidden;
 }
 
 .portfolio-header-title h2 {

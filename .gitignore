@@ -25,8 +25,8 @@
 /src/assets/videos/*.MP4
 /src/assets/videos/*.SRT
 /src/assets/videos/Пролет*
+/src/assets/videos/bgVideo.mp4
 !/src/assets/videos/
-!/src/assets/videos/bgVideo.mp4
 
 # Beget audit / артефакты деплоя
 /_beget_audit*
