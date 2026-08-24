@@ -9,7 +9,13 @@
 /coverage
 
 # production
-/build
+# Коммитим /build, чтобы автодеплой на сервере через `git pull` подтягивал
+# свежий index.html / JS / CSS. Исключаем только видео-файл:
+#   • его размер 224 МБ не влезет в git без огромного bloat-а,
+#   • на сервер его кладём вручную после `git pull`,
+#   • раз хеш имени (e543ab4b4cfce43eeacf) меняется при пересборке, в репо
+#     всё равно держать конкретное имя бессмысленно.
+/build/static/media/bgVideo.*.mp4
 
 # misc
 .DS_Store
@@ -19,9 +25,14 @@
 .env.test.local
 .env.production.local
 
-# Тяжёлые исходники видео (4K HEVC, .SRT) не тащим в git — они не нужны на runner,
-# билд локально берёт уже транскодированный bgVideo.mp4.
-# При этом сам bgVideo.mp4 (≈13.5 MB H.264 1080p) коммитим — он нужен сборке.
+# Тяжёлые исходники видео не тащим в git:
+#   • 4K HEVC и .SRT — не нужны на runner,
+#   • bgVideo.mp4 (~224 МБ H.264 1080p «Пролёт 4 Сосны») — тоже не коммитим,
+#     потому что видео лежит на сервере руками после `git pull`,
+#     а если попадёт в репо, сделает diff на сотни мегабайт.
+# На runner собирать билд без него не получится, поэтому build-процесс
+# (или deploy-скрипт) должен сам подкладывать файл перед `npm run build`,
+# либо (как у нас сейчас) собирать локально и пушить build/ целиком.
 /src/assets/videos/*.MP4
 /src/assets/videos/*.SRT
 /src/assets/videos/Пролет*
@@ -37,7 +48,6 @@
 /build.log
 /laboratoriya-dozhdy-deploy.zip
 /thegreenstone-beget-deploy*.zip
-/build/
 /winscp.ini
 # WinSCP-скрипты деплоя содержат пароль в URL, не коммитим
 /upload.txt
