@@ -1,0 +1,29 @@
+{
+  "short_name": "Rain-Lab",
+  "name": "Rain-Lab вЂ” Р›Р°Р±РѕСЂР°С‚РѕСЂРёСЏ РґРѕР¶РґСЏ",
+  "description": "РџСЂРѕРµРєС‚РёСЂРѕРІР°РЅРёРµ Рё РјРѕРЅС‚Р°Р¶ СЃРёСЃС‚РµРј Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРіРѕ РїРѕР»РёРІР° РІ РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРіРµ Рё Р›РµРЅРёРЅРіСЂР°РґСЃРєРѕР№ РѕР±Р»Р°СЃС‚Рё.",
+  "lang": "ru-RU",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#2c3e50",
+  "background_color": "#ffffff",
+  "categories": ["business", "lifestyle"]
+}
