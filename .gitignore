@@ -57,6 +57,7 @@ src/assets/images/latest_ssh_debug.png
 
 # Скриншоты из IDE/терминала могут содержать токены/пароли в выводе, не коммитим
 Снимок*
+/_backup/
 Screenshot*
 Screen*
 
