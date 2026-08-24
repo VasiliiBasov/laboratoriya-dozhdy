@@ -51,8 +51,16 @@ SSH_BASE_OPTS=(
 # ---------- 1. Список актуальных имён из локального build/ ----------
 # (rsync их НЕ удаляет, потому что мы без --delete, — но и удалять
 # нельзя, они нужны сайту.)
+#
+# ВАЖНО: начиная с актуальной раскладки CRA rsync кладёт ВСЁ содержимое
+# build/ прямо в public_html/ — включая index.html, asset-manifest.json,
+# favicon.ico, robots.txt, manifest.json, logo*.png. Они лежат в КОРНЕ
+# public_html/, поэтому cleanup не должен их трогать. Старый мусор (типа
+# public_html/build/index.html от предыдущей раскладки) сохранит префикс
+# "build/" и потому под ACTUAL не попадёт — будет удалён, как и раньше.
 ACTUAL_FILES="$(
   {
+    find build -maxdepth 1 -type f -printf '%P\n' 2>/dev/null || true
     ls build/static/js/main.*.js             2>/dev/null | sed 's|^build/||' || true
     ls build/static/css/main.*.css           2>/dev/null | sed 's|^build/||' || true
     ls build/static/media/bgVideo.*.mp4      2>/dev/null | sed 's|^build/||' || true
