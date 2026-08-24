@@ -37,7 +37,7 @@ const portfolioItems = [
   {
     id: 4,
     images: [sprinklerWorking, dripTechnology, appUi],
-    title: 'Частная территория',
+    title: 'КП Сосны',
     description: 'Индивидуальный проект озеленения и орошения участка',
   },
   {
