@@ -1,0 +1,9 @@
+# Все shell-скрипты и workflow-файлы — в LF (иначе на Linux runner-е
+# будет «/usr/bin/env: ‘bash\r’: No such file or directory»).
+*.sh           text eol=lf
+*.yml          text eol=lf
+*.yaml         text eol=lf
+
+# По умолчанию всё остальное пусть остаётся как было (на Windows
+# комфортнее CRLF для редактирования).
+*               text=auto
