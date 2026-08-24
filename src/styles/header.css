@@ -1,85 +1,85 @@
 .site-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-    background-color: rgba(255, 255, 255, 0.00);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.0);
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0);
+  z-index: 1000;
 }
 
 .site-header.scrolled {
-    background-color: rgba(255, 255, 255, 0.0);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.0);
+  background-color: rgba(255, 255, 255, 0);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0);
 }
 
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 15px 20px;
 }
 
 .logo {
-    z-index: 1001;
+  z-index: 1001;
 }
 
 .logo-img {
-    height: 150px;
-    width: auto;
-    transition: opacity 0.3s;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    background-color: rgba(255, 255, 255, 0.5); /* Белый цвет с прозрачностью 70% */
-    padding: 10px; /* Отступ фона от логотипа */
-    border-radius: 40px; /* (Опционально) скругление углов фона */
+  height: 150px;
+  width: auto;
+  transition: opacity 0.3s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.5); /* Белый цвет с прозрачностью 70% */
+  padding: 10px; /* Отступ фона от логотипа */
+  border-radius: 40px; /* (Опционально) скругление углов фона */
 }
 
 .logo-img:hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 .main-nav-container {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
 }
 
 .main-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
 }
 
 .main-nav li {
-    margin: 0 15px;
-    position: relative;
+  margin: 0 15px;
+  position: relative;
 }
 
 .main-nav a {
-    color: white;
-    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 22px;
-    padding: 8px 15px;
-    display: block;
-    transition: all 0.3s ease;
-    border-radius: 20px;
+  color: white;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 22px;
+  padding: 8px 15px;
+  display: block;
+  transition: all 0.3s ease;
+  border-radius: 20px;
 }
 
 .main-nav a:hover::after {
-    width: 100%;
+  width: 100%;
 }
 
 /* =================================================== */
@@ -87,68 +87,70 @@
 /* =================================================== */
 
 .portfolio-header-title {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 5;
-    width: 50vw;
-    max-width: 600px;
-    min-width: 280px;
-    text-align: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    will-change: opacity;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 5;
+  width: 50vw;
+  max-width: 600px;
+  min-width: 280px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  will-change: opacity;
 }
 
 .portfolio-header-title.visible {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 .portfolio-header-title.fade {
-    opacity: 0;
-    visibility: hidden;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .portfolio-header-title h2 {
-    margin: 0;
-    color: #ffffff;
-    font-size: 2.2rem;
-    font-weight: 700;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    letter-spacing: 1px;
+  margin: 0;
+  color: #ffffff;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 1px;
 }
 
 @media (max-width: 1024px) {
-    .portfolio-header-title h2 {
-        font-size: 1.7rem;
-    }
+  .portfolio-header-title h2 {
+    font-size: 1.7rem;
+  }
 }
 
 @media (max-width: 768px) {
-    .portfolio-header-title {
-        max-width: 60vw;
-    }
+  .portfolio-header-title {
+    max-width: 60vw;
+  }
 
-    .portfolio-header-title h2 {
-        font-size: 1.3rem;
-    }
+  .portfolio-header-title h2 {
+    font-size: 1.3rem;
+  }
 }
 
 @media (max-width: 480px) {
-    .portfolio-header-title {
-        max-width: 70vw;
-    }
+  .portfolio-header-title {
+    max-width: 70vw;
+  }
 
-    .portfolio-header-title h2 {
-        font-size: 1.1rem;
-    }
+  .portfolio-header-title h2 {
+    font-size: 1.1rem;
+  }
 }
 
 /* =================================================== */
@@ -156,148 +158,150 @@
 /* =================================================== */
 
 .header-contacts {
-    display: flex;
-    align-items: center;
-    gap: 12px; /* Отступ между номером и иконками */
-    margin-left: 50vw; /* Ваши исходные отступы */
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Отступ между номером и иконками */
+  margin-left: 50vw; /* Ваши исходные отступы */
 }
 
 .phone-link {
-    color: white;
-    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 18px;
-    white-space: nowrap;
-    transition: color 0.3s;
+  color: white;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 18px;
+  white-space: nowrap;
+  transition: color 0.3s;
 }
 
 .phone-link:hover {
-    color: #e0e0e0;
+  color: #e0e0e0;
 }
 
 /* Контейнер для иконок */
 .messenger-icons {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Отступ между WhatsApp и Telegram */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Отступ между WhatsApp и Telegram */
 }
 
 /* Ссылки-иконки */
 .messenger-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px; /* Размер иконок */
-    text-decoration: none;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-    /* Тень под иконками для контрастности на прозрачном фоне */
-    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.6));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px; /* Размер иконок */
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  /* Тень под иконками для контрастности на прозрачном фоне */
+  filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.6));
 }
 
 .messenger-link:hover {
-    transform: scale(1.15); /* Эффект увеличения */
-    opacity: 0.9;
+  transform: scale(1.15); /* Эффект увеличения */
+  opacity: 0.9;
 }
 
 /* Фирменные цвета иконок */
 .messenger-link.whatsapp {
-    color: #25D366; /* Зеленый WhatsApp */
+  color: #25d366; /* Зеленый WhatsApp */
 }
 
 .messenger-link.telegram {
-    color: #24A1DE; /* Синий Telegram */
+  color: #24a1de; /* Синий Telegram */
 }
 
 /* Стили для кастомной иконки-картинки (MAX) */
 .custom-messenger-icon {
-    width: 24px;  /* Размер подгоняем под шрифтовые иконки */
-    height: 24px;
-    object-fit: contain;
-    /* Если иконка черная или цветная, при желании можно настроить скругление */
-    border-radius: 4px;
+  width: 24px; /* Размер подгоняем под шрифтовые иконки */
+  height: 24px;
+  object-fit: contain;
+  /* Если иконка черная или цветная, при желании можно настроить скругление */
+  border-radius: 4px;
 }
 
 /* Если нужно подкорректировать отображение при наведении */
 .messenger-link.max:hover .custom-messenger-icon {
-    /* Дополнительные эффекты при наведении, если требуется */
+  /* Дополнительные эффекты при наведении, если требуется */
 }
 
 /* =================================================== */
 
 /* Мобильное меню */
 .mobile-menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    z-index: 1001;
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1001;
 }
 
 .menu-line {
-    display: block;
-    width: 25px;
-    height: 2px;
-    background: #333;
-    margin: 5px 0;
-    transition: all 0.3s ease;
+  display: block;
+  width: 25px;
+  height: 2px;
+  background: #333;
+  margin: 5px 0;
+  transition: all 0.3s ease;
 }
 
 .menu-line.open:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
+  transform: translateY(7px) rotate(45deg);
 }
 
 .menu-line.open:nth-child(2) {
-    opacity: 0;
+  opacity: 0;
 }
 
 .menu-line.open:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 /* Адаптация для мобильных устройств */
 @media (max-width: 768px) {
-    .main-nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        background: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        transform: translateY(-100%);
-        opacity: 0;
-        transition: all 0.3s ease;
-        z-index: 1000;
-    }
+  .main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
 
-    .site-header.mobile-open .main-nav {
-        transform: translateY(0);
-        opacity: 1;
-    }
+  .site-header.mobile-open .main-nav {
+    transform: translateY(0);
+    opacity: 1;
+  }
 
-    .main-nav ul {
-        flex-direction: column;
-        align-items: center;
-    }
+  .main-nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .main-nav li {
-        margin: 15px 0;
-    }
+  .main-nav li {
+    margin: 15px 0;
+  }
 
-    .header-contacts {
-        display: none;
-    }
+  .header-contacts {
+    display: none;
+  }
 
-    .mobile-menu-toggle {
-        display: block;
-    }
+  .mobile-menu-toggle {
+    display: block;
+  }
 
-    .site-header.mobile-open {
-        background: white;
-    }
+  .site-header.mobile-open {
+    background: white;
+  }
 }

@@ -1,57 +1,57 @@
 .footer {
-    position: relative;        /* Обязательно, чтобы работал z-index */
-    z-index: 10;               /* Помещает футер ПОВЕРХ фонового видео и картинок */
-    scroll-snap-align: end;    /* Привязка скролла к концу страницы */
-    background-color: #1a1a1a; /* Либо var(--dark-color), если переменная объявлена */
-    color: white;
-    padding: 20px 0 16px;
-    width: 100%;
+  position: relative; /* Обязательно, чтобы работал z-index */
+  z-index: 10; /* Помещает футер ПОВЕРХ фонового видео и картинок */
+  scroll-snap-align: end; /* Привязка скролла к концу страницы */
+  background-color: #1a1a1a; /* Либо var(--dark-color), если переменная объявлена */
+  color: white;
+  padding: 20px 0 16px;
+  width: 100%;
 }
 
 .footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 14px;
 }
 
 .footer-logo {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 8px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .footer-contacts p {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .footer-social a {
-    display: block;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .footer-social a:hover {
-    color: var(--secondary-color);
+  color: var(--secondary-color);
 }
 
 .footer-copyright {
-    text-align: center;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-updated {
-    text-align: center;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.5);
-    margin-top: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 10px;
 }
 
 .footer-updated a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: underline;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
 }
 
 .footer-updated a:hover {
-    color: var(--secondary-color, #3498db);
+  color: var(--secondary-color, #3498db);
 }

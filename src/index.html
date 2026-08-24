@@ -1,6 +1,6 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#2c3e50" />
@@ -13,19 +13,25 @@
         перетираются react-helmet-async в <SeoHead>.
     -->
     <title>Rain-Lab — Лаборатория дождя</title>
-    <meta name="description" content="Проектирование, монтаж и обслуживание систем автоматического полива в Санкт-Петербурге и Ленинградской области. Автополив под ключ." />
+    <meta
+      name="description"
+      content="Проектирование, монтаж и обслуживание систем автоматического полива в Санкт-Петербурге и Ленинградской области. Автополив под ключ."
+    />
 
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link rel="icon" type="image/png" href="%PUBLIC_URL%/favicon.png" />
 
     <!-- Шрифты подключаем через <link> в head -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
 
     <!-- JSON-LD: информация о компании (Organization) и о сайте (WebSite).
          Закрывает пункты «Структурированные данные», «Информация о владельце»
          и «Контакты на страницах» из отчёта beget. -->
     <script type="application/ld+json">
-    {
+      {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Rain-Lab",
@@ -36,41 +42,41 @@
         "email": "info@rain-lab.ru",
         "telephone": "+7-999-529-20-65",
         "brand": {
-            "@type": "Brand",
-            "name": "Поливторг"
+          "@type": "Brand",
+          "name": "Поливторг"
         },
         "member": {
-            "@type": "Organization",
-            "name": "Поливторг",
-            "description": "Поставщик оборудования для систем автоматического полива"
+          "@type": "Organization",
+          "name": "Поливторг",
+          "description": "Поставщик оборудования для систем автоматического полива"
         },
         "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Санкт-Петербург",
-            "addressRegion": "Ленинградская область",
-            "addressCountry": "RU"
+          "@type": "PostalAddress",
+          "addressLocality": "Санкт-Петербург",
+          "addressRegion": "Ленинградская область",
+          "addressCountry": "RU"
         },
         "sameAs": []
-    }
+      }
     </script>
 
     <script type="application/ld+json">
-    {
+      {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Rain-Lab",
         "url": "https://rain-lab.ru/",
         "inLanguage": "ru-RU",
         "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://rain-lab.ru/?q={search_term_string}",
-            "query-input": "required name=search_term_string"
+          "@type": "SearchAction",
+          "target": "https://rain-lab.ru/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
         }
-    }
+      }
     </script>
 
     <script type="application/ld+json">
-    {
+      {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "@id": "https://rain-lab.ru/#localbusiness",
@@ -81,20 +87,22 @@
         "priceRange": "₽₽",
         "areaServed": ["Санкт-Петербург", "Ленинградская область"],
         "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Санкт-Петербург",
-            "addressCountry": "RU"
+          "@type": "PostalAddress",
+          "addressLocality": "Санкт-Петербург",
+          "addressCountry": "RU"
         },
-        "openingHoursSpecification": [{
+        "openingHoursSpecification": [
+          {
             "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
             "opens": "09:00",
             "closes": "20:00"
-        }]
-    }
+          }
+        ]
+      }
     </script>
-</head>
-<body>
-<div id="root"></div>
-</body>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>

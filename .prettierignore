@@ -1,0 +1,32 @@
+# Build / lock-файлы и сгенерированный CI артефакт
+build/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Бинарные ассеты (3D, видео, изображения) — prettier их калечит
+public/models/
+public/*.glb
+public/*.gltf
+public/*.bin
+public/*.png
+public/*.jpg
+public/*.jpeg
+public/*.webp
+public/*.mp4
+
+# Секреты
+.env
+.env.*
+
+# IDE / служебное
+.idea/
+.vscode/
+_backup/
+_beget_audit*/
+_extract.ps1
+winscp.ini
+winscp-*.log
+build.log
+_upload*.txt
+post-upload.txt
