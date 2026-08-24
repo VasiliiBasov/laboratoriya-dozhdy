@@ -19,19 +19,19 @@ const portfolioItems = [
   {
     id: 1,
     images: [sprinklerWorking, dripPrettyDrop, dripBeds],
-    title: 'Загородный участок в поселке Сосны',
+    title: 'КП Сосны',
     description: 'Полный комплекс работ по автополиву и благоустройству территории',
   },
   {
     id: 2,
     images: [dripTechnology, sprinklerWorking, dripPrettyDrop],
-    title: 'Загородный участок в поселке Суванто',
+    title: 'КП Суванто',
     description: 'Проектирование и монтаж системы автоматического полива',
   },
   {
     id: 3,
     images: [rotorCutaway, nozzleHunter, pipesCutaway],
-    title: 'Загородный участок в поселке Шале-Парк',
+    title: 'Шале-Парк Superbia',
     description: 'Установка современной системы полива с датчиками влажности',
   },
   {
