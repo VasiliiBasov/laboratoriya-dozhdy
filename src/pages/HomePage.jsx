@@ -285,16 +285,14 @@ const HomePage = () => {
         const v = videoRef.current;
         if (!v) return undefined;
 
-        let intervalId = null;
         let blocked = false; // true, Р ВµРЎРѓР В»Р С‘ Р С—Р ВµРЎР‚Р Р†РЎвЂ№Р в„– play() Р С•РЎвЂљР С”Р В»Р С•Р Р…РЎвЂР Р… Р С—Р С•Р В»Р С‘РЎвЂљР С‘Р С”Р С•Р в„–
 
-        const startLoop = () => {
-            if (intervalId != null) return;
-            intervalId = setInterval(() => {
-                if (v.currentTime >= VIDEO_LOOP_AT) {
-                    try { v.currentTime = VIDEO_START_AT; } catch (_) {}
-                }
-            }, 500);
+        // Loop via native 'timeupdate' event instead of setInterval(500ms).
+        // Browser fires ~4x/sec during playback; no JS timer load, no iOS freeze on scroll.
+        const onTimeUpdate = () => {
+            if (v.currentTime >= VIDEO_LOOP_AT) {
+                try { v.currentTime = VIDEO_START_AT; } catch (_) {}
+            }
         };
 
         const tryPlay = () => {
@@ -337,7 +335,7 @@ const HomePage = () => {
         const onSeeked = () => {
             // Р вЂ™Р С‘Р Т‘Р ВµР С• РЎР‚Р ВµР В°Р В»РЎРЉР Р…Р С• Р Р…Р В° Р С—Р С•Р В·Р С‘РЎвЂ Р С‘Р С‘ VIDEO_START_AT РІР‚вЂќ РЎвЂљР ВµР С—Р ВµРЎР‚РЎРЉ Р СР С•Р В¶Р Р…Р С• Р В·Р В°Р С—РЎС“РЎРѓР С”Р В°РЎвЂљРЎРЉ
             tryPlay();
-            startLoop();
+            v.addEventListener('timeupdate', onTimeUpdate);
         };
 
         // Р вЂўРЎРѓР В»Р С‘ Р СР ВµРЎвЂљР В°Р Т‘Р В°Р Р…Р Р…РЎвЂ№Р Вµ РЎС“Р В¶Р Вµ Р В·Р В°Р С–РЎР‚РЎС“Р В¶Р ВµР Р…РЎвЂ№ (Р Р…Р В°Р С—РЎР‚Р С‘Р СР ВµРЎР‚, Р С‘Р В· preload-Р С”РЎРЊРЎв‚¬Р В°) РІР‚вЂќ РЎРѓРЎР‚Р В°Р В·РЎС“
@@ -349,7 +347,7 @@ const HomePage = () => {
         v.addEventListener('seeked', onSeeked, { once: true });
 
         return () => {
-            if (intervalId != null) clearInterval(intervalId);
+            v.removeEventListener('timeupdate', onTimeUpdate);
         };
     }, []);
 
