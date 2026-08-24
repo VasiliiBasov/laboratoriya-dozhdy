@@ -181,6 +181,8 @@ jobs:
           #      аккуратно удаляет только CRA-ассеты и bgVideo, чьи хеши
           #      больше не совпадают с актуальной сборкой. Подробности и
           #      whitelist — в scripts/cleanup-stale-assets.sh.
+          export BEGET_HOST="${{ secrets.BEGET_HOST }}"
+          export BEGET_USER="${{ secrets.BEGET_USER }}"
           export BEGET_REMOTE_DIR="$REMOTE_DIR"
           bash scripts/cleanup-stale-assets.sh
 

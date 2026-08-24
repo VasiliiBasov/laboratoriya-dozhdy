@@ -24,15 +24,15 @@
 #
 # Окружение:
 #   BEGET_SSH_KEY   — приватный ключ (содержимое, не путь)
-#   BEGET_SSH_HOST  — host
-#   BEGET_SSH_USER  — user
+#   BEGET_HOST      — host (имя secret'а в GitHub: BEGET_HOST)
+#   BEGET_USER      — user (имя secret'а в GitHub: BEGET_USER)
 #   BEGET_REMOTE_DIR — абсолютный путь к public_html на сервере
 
 set -euo pipefail
 
 : "${BEGET_SSH_KEY:?BEGET_SSH_KEY secret is required}"
-: "${BEGET_SSH_HOST:?BEGET_SSH_HOST secret is required}"
-: "${BEGET_SSH_USER:?BEGET_SSH_USER secret is required}"
+: "${BEGET_HOST:?BEGET_HOST secret is required}"
+: "${BEGET_USER:?BEGET_USER secret is required}"
 : "${BEGET_REMOTE_DIR:?BEGET_REMOTE_DIR env is required (e.g. /home/l/lizaptsw/rain-lab.ru/public_html)}"
 
 KEY_FILE="$(mktemp)"
@@ -40,7 +40,7 @@ trap 'rm -f "$KEY_FILE"' EXIT
 printf '%s\n' "$BEGET_SSH_KEY" > "$KEY_FILE"
 chmod 600 "$KEY_FILE"
 
-SSH_TARGET="$BEGET_SSH_USER@$BEGET_SSH_HOST"
+SSH_TARGET="$BEGET_USER@$BEGET_HOST"
 SSH_BASE_OPTS=(
   -i "$KEY_FILE"
   -o StrictHostKeyChecking=yes
