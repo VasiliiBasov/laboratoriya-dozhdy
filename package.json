@@ -22,7 +22,16 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "npm run build && deploy-to-beget.bat",
-    "deploy:fast": "deploy-to-beget.bat"
+    "deploy:fast": "deploy-to-beget.bat",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,yml,yaml,css,md}": [
+      "prettier --check"
+    ],
+    "*.sh": [
+      "bash -n"
+    ]
   },
   "browserslist": {
     "production": [
@@ -33,5 +42,10 @@
     "development": [
       "last 1 chrome version"
     ]
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.9.6"
   }
 }

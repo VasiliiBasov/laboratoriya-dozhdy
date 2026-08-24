@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/h"
+
+# Страж: блокируем push, если в индексе любого из последних коммитов
+# появились запрещённые пути (build/ — артефакт, .env — секрет).
+# Сканируем staged + последние 5 коммитов на всякий случай.
+BAD=$(git log --name-only --pretty=format: -n 5 --diff-filter=ACM 2>/dev/null | \
+      git diff --cached --name-only --diff-filter=ACM 2>/dev/null - | \
+      sort -u | grep -E '^(build/|\.env$|\.env\.[^/]+$)' || true)
+if [ -n "$BAD" ]; then
+  echo ""
+  echo "❌ Обнаружены запрещённые пути в индексе/последних коммитах:"
+  echo "$BAD" | sed 's/^/   /'
+  echo ""
+  echo "build/  — артефакт сборки, его собирает CI."
+  echo ".env*   — секреты, должны быть только локально."
+  echo ""
+  exit 1
+fi
+
+# Подсказка про размер бинарей (>10 МБ) среди staged.
+BIG=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null | \
+      while read f; do
+        if [ -f "$f" ]; then
+          size=$(wc -c < "$f" 2>/dev/null || echo 0)
+          if [ "$size" -gt 10485760 ]; then echo "$f ($size bytes)"; fi
+        fi
+      done)
+if [ -n "$BIG" ]; then
+  echo ""
+  echo "❌ Слишком большие файлы staged (>10 МБ):"
+  echo "$BIG" | sed 's/^/   /'
+  echo ""
+  exit 1
+fi

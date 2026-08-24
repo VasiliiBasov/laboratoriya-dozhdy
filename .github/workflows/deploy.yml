@@ -23,6 +23,10 @@ jobs:
           cache: npm
 
       - name: Install dependencies
+        # HUSKY=0 — husky не нужен в CI: там никто не делает git commit/push,
+        # а prepare-скрипт в package.json шумит в логах.
+        env:
+          HUSKY: 0
         run: npm ci
 
       # ---------- Диагностика hero-видео ----------
