@@ -19,7 +19,7 @@ const portfolioItems = [
   {
     id: 1,
     images: [sprinklerWorking, dripPrettyDrop, dripBeds],
-    title: 'Загородный участок',
+    title: 'Загородный участок в поселке Сосны',
     description: 'Полный комплекс работ по автополиву и благоустройству территории',
   },
   {
