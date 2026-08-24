@@ -31,7 +31,7 @@ const portfolioItems = [
   {
     id: 3,
     images: [rotorCutaway, nozzleHunter, pipesCutaway],
-    title: 'Система автополива',
+    title: 'Загородный участок в поселке Шале-Парк',
     description: 'Установка современной системы полива с датчиками влажности',
   },
   {
