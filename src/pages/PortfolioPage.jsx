@@ -25,7 +25,7 @@ const portfolioItems = [
   {
     id: 2,
     images: [dripTechnology, sprinklerWorking, dripPrettyDrop],
-    title: 'Ландшафтный проект',
+    title: 'Загородный участок в поселке Суванто',
     description: 'Проектирование и монтаж системы автоматического полива',
   },
   {
