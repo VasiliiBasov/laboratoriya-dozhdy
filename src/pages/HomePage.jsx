@@ -5,8 +5,16 @@ import SeoHead, { BRAND_NAME } from '../components/SeoHead';
 import Breadcrumbs from '../components/Breadcrumbs';
 import '../styles/portfolio.css';
 
-// Видео для первой hero-секции
-import bgVideo from '../assets/videos/bgVideo.mp4';
+// Видео для первой hero-секции.
+// ВАЖНО: это НЕ import, а прямой URL. Видео лежит в /static/media/ на сервере
+// (заливается туда ВРУЧНУЮ, через WinSCP — см. BEGET_DEPLOY.md), а в репо его
+// НЕТ (файл ~224 МБ, GitHub его отклоняет; CI его никогда не видит и не потащит
+// через rsync). Поэтому webpack собирает проект БЕЗ этого видео, а <video>
+// грузит его из public_html по абсолютному пути точно так же, как постер из
+// public/. Никогда не возвращайте `import bgVideo from '...'` — это вернёт
+// большой файл в репо и сломает push в GitHub.
+const bgVideoUrl = `${process.env.PUBLIC_URL}/static/media/bgVideoProlet.mp4`;
+
 // Фоны для второй и третьей секций
 import bgProjects from '../assets/images/bg-projects.png';
 import bgCalc from '../assets/images/bg-calc.png';
@@ -28,7 +36,7 @@ const homeSections = [
     {
         id: 1,
         type: 'video',
-        src: bgVideo,
+        src: bgVideoUrl,
         title: 'Автополив под ключ',
         subtitle: 'Профессиональный подход к каждому проекту',
         cta: null,

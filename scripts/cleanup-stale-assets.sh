@@ -5,7 +5,10 @@
 #   • static/js/main.*.js.map
 #   • static/css/main.*.css
 #   • static/css/main.*.css.map
-#   • static/media/bgVideo.*.mp4 (но НЕ актуальный)
+#   • static/media/bgVideo.*.mp4 (но НЕ актуальный)  ← старые CRA-хеши
+#   • static/media/bgVideoProlet.*.mp4 (но НЕ актуальный)  ← если webpack
+#     когда-то начнёт собирать это видео и класть хешированные копии —
+#     оставим только актуальную, остальные снесём.
 #   • index.html / asset-manifest.json / favicon.ico /
 #     robots.txt / manifest.json / logo*.png в КОРНЕ public_html/
 #     (эти файлы пересоздаются rsync-ом, но если когда-то была старая
@@ -13,6 +16,9 @@
 #     Поэтому удаляем вручную по whitelist, чтобы точно не остался мусор.)
 #   • static/ и build/ в КОРНЕ public_html/, если они там есть — мы
 #     заливаем ассеты прямо в public_html/, а не в public_html/build/.
+#
+# ВАЖНО: ручной bgVideoProlet.mp4 (без хеша) НЕ трогаем никогда — он
+# заливается через WinSCP и не имеет отношения к CRA-хешам.
 #
 # Подключается из .github/workflows/deploy.yml ПОСЛЕ rsync и ДО пост-проверки.
 #
@@ -47,11 +53,19 @@ SSH_BASE_OPTS=(
 # нельзя, они нужны сайту.)
 ACTUAL_FILES="$(
   {
-    ls build/static/js/main.*.js       2>/dev/null | sed 's|^build/||' || true
-    ls build/static/css/main.*.css     2>/dev/null | sed 's|^build/||' || true
-    ls build/static/media/bgVideo.*.mp4 2>/dev/null | sed 's|^build/||' || true
+    ls build/static/js/main.*.js             2>/dev/null | sed 's|^build/||' || true
+    ls build/static/css/main.*.css           2>/dev/null | sed 's|^build/||' || true
+    ls build/static/media/bgVideo.*.mp4      2>/dev/null | sed 's|^build/||' || true
+    ls build/static/media/bgVideoProlet.*.mp4 2>/dev/null | sed 's|^build/||' || true
   } | sort -u
 )"
+
+# ---------- 1a. Список файлов, которые НИКОГДА нельзя удалять ----------
+# Ручные ассеты, залитые через WinSCP напрямую, не из CI:
+#   • /static/media/bgVideoProlet.mp4 — герой-видео «Пролёт 4 Сосны»
+NEVER_DELETE_PATTERNS=(
+  "bgVideoProlet.mp4"
+)
 
 WHITELIST_FILE="$(mktemp)"
 trap 'rm -f "$KEY_FILE" "$WHITELIST_FILE"' EXIT
@@ -60,6 +74,11 @@ trap 'rm -f "$KEY_FILE" "$WHITELIST_FILE"' EXIT
   if [ -n "$ACTUAL_FILES" ]; then
     printf '  %q\n' $ACTUAL_FILES
   fi
+  echo ")"
+  echo "NEVER_DELETE_PATTERNS=("
+  for p in "${NEVER_DELETE_PATTERNS[@]}"; do
+    printf '  %q\n' "$p"
+  done
   echo ")"
 } > "$WHITELIST_FILE"
 
@@ -80,14 +99,17 @@ cd "$REMOTE_DIR"
 
 source ~/.cache-deploy/cleanup-actual.env
 
-# Паттерны удаляемых файлов (только хешированные CRA-ассеты и bgVideo,
+# Паттерны удаляемых файлов (только хешированные CRA-ассеты и bgVideo*,
 # плюс корень public_html/, куда CRA кладёт index.html и манифесты).
+# ВАЖНО: точные имена без хеша (например, "bgVideoProlet.mp4")
+# идут через NEVER_DELETE_PATTERNS — их cleanup вообще не трогает.
 PATTERNS=(
   "main.*.js"
   "main.*.js.map"
   "main.*.css"
   "main.*.css.map"
   "bgVideo.*.mp4"
+  "bgVideoProlet.*.mp4"
   "index.html"
   "asset-manifest.json"
   "favicon.ico"
@@ -106,12 +128,36 @@ is_actual() {
   return 1
 }
 
+# Никогда не удалять файлы, залитые вручную (без хеша).
+# Проверяем по basename: если имя точно совпадает с одним из NEVER_DELETE_PATTERNS,
+# это «ручной» ассет — пропускаем, даже если он попал под паттерн выше.
+# Под set -u обращение к пустому массиву "${arr[@]}" валит скрипт —
+# проверяем длину и подставляем пустой fallback через "${arr[@]+"${arr[@]}"}".
+is_never_delete() {
+  local filepath="$1"
+  local base
+  base="$(basename "$filepath")"
+  # Если массив пуст — никто не «никогда не удаляется».
+  if [ "${#NEVER_DELETE_PATTERNS[@]}" -eq 0 ]; then
+    return 1
+  fi
+  local p
+  for p in "${NEVER_DELETE_PATTERNS[@]}"; do
+    [ "$base" = "$p" ] && return 0
+  done
+  return 1
+}
+
 removed_count=0
 for pat in "${PATTERNS[@]}"; do
   while IFS= read -r -d '' f; do
     rel="${f#./}"
     if is_actual "$rel"; then
-      printf '  keep: %s\n' "$rel"
+      printf '  keep (actual): %s\n' "$rel"
+      continue
+    fi
+    if is_never_delete "$f"; then
+      printf '  keep (manual): %s\n' "$rel"
       continue
     fi
     printf '  rm:   %s\n' "$rel"

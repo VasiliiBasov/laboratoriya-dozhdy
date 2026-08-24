@@ -25,38 +25,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # ---------- Диагностика резолва hero-видео ----------
-      # Предыдущие раны падали на Build с `Can't resolve '../assets/videos/bgVideo.mp4'`,
-      # хотя файл уже закоммичен (см. a78bd3a). Этот шаг показывает, реально ли checkout
-      # донёс blob, и сможет ли Node.require() его увидеть — это та же логика, что у webpack.
-      - name: Debug asset on disk
+      # ---------- Диагностика hero-видео ----------
+      # Сейчас в репо НЕТ файла bgVideoProlet.mp4 (он ~224 МБ, GitHub его
+      # отклоняет, и CI его не должен видеть). webpack собирает проект без
+      # него, а <video> в браузере запрашивает /static/media/bgVideoProlet.mp4
+      # напрямую с сервера. Этот шаг только подтверждает, что в build/ этого
+      # файла действительно нет — чтобы случайно не вернуть его в репо и
+      # не сломать push в GitHub.
+      - name: Debug hero-video on disk
         run: |
           echo "=== HEAD ==="
           git rev-parse HEAD
           git log -1 --format='%H %ct %s' --no-patch
           echo "=== Tracked videos ==="
-          git ls-files src/assets/videos/
-          echo "=== On-disk videos ==="
-          ls -la src/assets/videos/
-          echo "=== find bgVideo anywhere ==="
-          find . -iname 'bgVideo*' -not -path './node_modules/*' -not -path './.git/*' 2>/dev/null || true
-          if [ -f src/assets/videos/bgVideo.mp4 ]; then
-            echo "=== file ==="
-            file src/assets/videos/bgVideo.mp4
-            echo "=== stat ==="
-            stat -c 'size=%s mtime=%y' src/assets/videos/bgVideo.mp4
-            echo "=== first bytes (should contain 'ftyp') ==="
-            xxd -l 32 src/assets/videos/bgVideo.mp4 || head -c 32 src/assets/videos/bgVideo.mp4 | od -c | head -2
-            echo "=== node statSync ==="
-            node -e "const s=require('fs').statSync('src/assets/videos/bgVideo.mp4'); console.log('size=',s.size,'mtime=',s.mtime)"
-            echo "=== node require.resolve (same call webpack makes) ==="
-            node -e "try{const r=require('path').resolve('src/assets/videos/bgVideo.mp4'); console.log('absPath=',r); const fs=require('fs'); console.log('exists=',fs.existsSync(r));}catch(e){console.error('FAIL',e);process.exit(2);}"
+          git ls-files src/assets/videos/ || echo "(none)"
+          echo "=== On-disk videos (src/assets/videos/) ==="
+          ls -la src/assets/videos/ 2>/dev/null || echo "(directory missing)"
+          echo "=== Sanity: big mp4 must NOT be in build/ ==="
+          if [ -f build/static/media/bgVideoProlet.mp4 ] || find build -iname 'bgVideoProlet*.mp4' -print -quit | grep -q .; then
+            echo "::warning::bgVideoProlet.mp4 unexpectedly found in build/ — check webpack"
+            find build -iname 'bgVideoProlet*.mp4' 2>/dev/null || true
           else
-            echo "!!! src/assets/videos/bgVideo.mp4 NOT FOUND on runner"
-            echo "Listing every src/assets/ tree:"
-            find src/assets -maxdepth 3 -type d 2>/dev/null
-            echo "All videos under runner workspace:"
-            find /home/runner/work -iname '*.mp4' 2>/dev/null || true
+            echo "OK: build/ не содержит bgVideoProlet.mp4 (как и должно быть)"
           fi
 
       - name: Build
@@ -212,13 +202,16 @@ jobs:
             echo "::error::index.html MISSING on server"
             exit 1
           fi
-          echo "--- bgVideo.mp4 ---"
-          shopt -s nullglob
-          vids=( "$REMOTE_DIR"/static/media/bgVideo.*.mp4 )
-          if [ ${#vids[@]} -gt 0 ]; then
-            echo "bgVideo.mp4 OK: ${vids[0]} ($(wc -c < "${vids[0]}") bytes)"
+          echo "--- bgVideoProlet.mp4 ---"
+          # Герой-видео НЕ приходит из CI: rsync его не тащит (его нет в build/),
+          # а кладётся вручную через WinSCP. На сервере он лежит под именем
+          # bgVideoProlet.mp4 (без хеша). Предупреждаем, если пропал — это
+          # повод залить его снова, но НЕ повод ронять деплой (сайт без
+          # видео всё равно работает: постер + <video poster> рендерится).
+          if [ -f "$REMOTE_DIR/static/media/bgVideoProlet.mp4" ]; then
+            echo "bgVideoProlet.mp4 OK ($(wc -c < "$REMOTE_DIR/static/media/bgVideoProlet.mp4") bytes)"
           else
-            echo "::warning::bgVideo.mp4 NOT FOUND"
+            echo "::warning::bgVideoProlet.mp4 NOT FOUND on server — залейте вручную через WinSCP"
           fi
           echo "--- service folders (must survive) ---"
           for d in .ssh cgi-bin .cache; do
