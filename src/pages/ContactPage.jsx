@@ -9,7 +9,7 @@ import {
     FaEnvelope,
     FaMapMarkerAlt
 } from 'react-icons/fa';
-import maxIcon from '../assets/images/max-icon.svg';
+import maxIcon from '../assets/images/max-icon.webp';
 // Используем свои фото из папки pinterest/ — как и остальные страницы сайта.
 import dripBeds from '../assets/images/pinterest/drip-beds.jpg';
 import rotorCutaway from '../assets/images/pinterest/rotor-cutaway.jpg';

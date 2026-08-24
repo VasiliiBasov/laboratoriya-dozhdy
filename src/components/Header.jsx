@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { FaWhatsapp, FaTelegram } from 'react-icons/fa';
 import '../styles/header.css';
 import logo from '../assets/images/logo20.png';
-import maxIcon from '../assets/images/max-icon.svg';
+import maxIcon from '../assets/images/max-icon.webp';
 
 function Header({ portfolioTitle = '' }) {
     const [isScrolled, setIsScrolled] = useState(false);
