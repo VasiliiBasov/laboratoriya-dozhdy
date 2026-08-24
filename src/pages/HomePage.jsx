@@ -209,9 +209,17 @@ const HomePage = () => {
 useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+    // Сразу после монтажа фиксируем скорость 0.5x — на iOS/Safari autoplay
+    // может стартовать раньше loadedmetadata, и тогда первый кадр уже
+    // рендерится в нужном темпе.
+    video.playbackRate = 0.5;
 
     const handleLoaded = () => {
         try {
+            // Скорость 0.5x — пролёт камеры выглядит плавнее на длинном
+            // ролике «Пролёт 4 Сосны». Подтверждаем здесь, потому что
+            // некоторые браузеры могут сбросить значение при перемотке.
+            video.playbackRate = 0.5;
             video.currentTime = VIDEO_START_AT;
             const p = video.play();
             if (p && typeof p.catch === 'function') {
